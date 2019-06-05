@@ -1,14 +1,14 @@
-import React from 'react'
-import { Container, Row } from 'react-bootstrap'
-import { Category, Product } from '../../containers'
+import React from 'react';
+import { Container, Row } from 'react-bootstrap';
+import { Category, Product } from '../../containers';
 
-const ProductPage = ({ cat, prod }) => (
+const ProductPage = ({ categoryName, prod }) => (
   <Container>
-    <Product categoryName={cat} productId={prod} />
+    <Product categoryName={categoryName} productId={prod} />
     <Row className="bg-white">
-      <Category categoryName={cat} />
+      <Category categoryName={categoryName} />
     </Row>
   </Container>
-)
+);
 
-export default ProductPage
+export default ProductPage;
