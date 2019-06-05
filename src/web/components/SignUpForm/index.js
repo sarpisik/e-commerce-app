@@ -27,6 +27,7 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
         password2
       };
       simulateNetworkRequest(formValues)
+        .then(response => response.json())
         .then(authUser => {
           console.log(authUser);
           // authUser.email = email;
@@ -39,11 +40,11 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
           })
         )
         .then(() => onReset())
-        .then(() => {
-          props.location.state
-            ? props.history.goBack()
-            : props.history.replace(ROUTES.CART);
-        })
+        // .then(() => {
+        //   props.location.state
+        //     ? props.history.goBack()
+        //     : props.history.replace(ROUTES.CART);
+        // })
         .catch(err => {
           console.error(err);
         });
@@ -51,7 +52,6 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
       return null;
     }
   };
-  console.log(process.env);
 
   return (
     <Form onSubmit={onSubmit}>

@@ -1,20 +1,20 @@
 const db = require('../../../db/mongo');
-const security = require('../../../utility/security');
+const tokenGenerator = require('../../../utility/token');
 
 module.exports = function(request) {
   return new Promise((resolve, reject) => {
-    const { username, password } = request.body;
-    const result = {
+    const { userName, password } = request.body;
+    const respond = {
       success: false,
       message: ''
     };
 
-    // If username and password fields filled, check database.
+    // If userName and password fields filled, check database.
     // Else, send error.
-    if (username && password) {
+    if (userName && password) {
       db.ReadDB(
         'users',
-        { username },
+        { userName },
         {
           name: 1,
           password: 1,
@@ -30,105 +30,25 @@ module.exports = function(request) {
           // If the user is exist, generate a new token hash.
           // Else, send error.
           if (userResult && userResult.length > 0) {
-            const tokenHash = security.genRandomString(40);
-            const loginTime = new Date();
-
-            const difference = loginTime - userResult[0].lastTry;
-
-            // If the last login try is more than 2 seconds ago, generate a new token hash.
-            // Else, send DDOS error.
-            if (difference / 1000 > 2) {
-              // If the hash password is valid, update the token and send result.
-              // Else, send error.
-              if (
-                security.checkPassword(
-                  userResult[0].password,
-                  password,
-                  userResult[0].salt
-                )
-              ) {
-                const newPass = security.saltHashPassword(password);
-                const tokenItem = {
-                  token: tokenHash,
-                  time: loginTime
-                };
-                db.UpdateDB(
-                  'users',
-                  { _id: userResult[0]._id },
-                  {
-                    $push: {
-                      tokens: {
-                        $each: [tokenItem],
-                        // Keep last 5 token sessions
-                        $slice: -5
-                      }
-                    },
-                    $set: {
-                      lastLogin: loginTime,
-                      lastTry: loginTime,
-                      salt: newPass.salt,
-                      password: newPass.passwordHash
-                    }
-                  }
-                )
-                  .then(function() {
-                    result.success = true;
-                    result.message = '';
-                    result.user = {
-                      username: username,
-                      name: userResult[0].name,
-                      surname: userResult[0].surname
-                    };
-                    // This token will be used for backend access
-                    result.session = tokenHash;
-                    resolve(result);
-                  })
-                  .catch(() => {
-                    result.success = false;
-                    result.message = 'Login Error';
-                    reject(result);
-                  });
-              } else {
-                result.success = false;
-                result.message = 'Login Error';
-                reject(result);
-              }
-            } else {
-              db.UpdateDB(
-                'users',
-                { _id: userResult[0]._id },
-                {
-                  $set: { lastTry: loginTime }
-                }
-              )
-                .then(() => {
-                  result.success = false;
-                  result.ddos = true;
-                  result.message = 'Login Error DDOS';
-                  reject(result);
-                })
-                .catch(() => {
-                  result.success = false;
-                  result.ddos = true;
-                  result.message = 'Login Error DDOS';
-                  reject(result);
-                });
-            }
+            tokenGenerator(userResult, respond, userName, password)
+              // Send user infos and token hash
+              .then(respond => resolve(respond))
+              .catch(err => reject(err));
           } else {
-            result.success = false;
-            result.message = 'Login Error';
-            reject(result);
+            respond.success = false;
+            respond.message = 'User Does Not Exist';
+            reject(respond);
           }
         })
         .catch(err => {
-          result.success = false;
-          result.message = err;
-          reject(result);
+          respond.success = false;
+          respond.message = err;
+          reject(respond);
         });
     } else {
-      result.success = false;
-      result.message = 'Login Error';
-      reject(result);
+      respond.success = false;
+      respond.message = 'Login Error';
+      reject(respond);
     }
   });
 };
