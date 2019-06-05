@@ -79,6 +79,7 @@ module.exports = function(request) {
                       name: userResult[0].name,
                       surname: userResult[0].surname
                     };
+                    // This token will be used for backend access
                     result.session = tokenHash;
                     resolve(result);
                   })
