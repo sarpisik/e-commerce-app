@@ -43,11 +43,15 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
           props.location.state
             ? props.history.goBack()
             : props.history.replace(ROUTES.CART);
+        })
+        .catch(err => {
+          console.error(err);
         });
     } else {
       return null;
     }
   };
+  console.log(process.env);
 
   return (
     <Form onSubmit={onSubmit}>

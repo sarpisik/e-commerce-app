@@ -1,21 +1,22 @@
-const path = require('path')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
+const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 // Workbox, info = https://webpack.js.org/guides/progressive-web-application
-const WorkboxPlugin = require('workbox-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const autoprefixer = require('autoprefixer')
-const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin')
-const WebpackPwaManifest = require('webpack-pwa-manifest')
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+  .BundleAnalyzerPlugin;
 
 module.exports = (env, argv) => {
-  console.log(argv.mode)
+  console.log(argv.mode);
   // Common config
   let config = {
     entry: './src/web/index.js',
@@ -100,9 +101,10 @@ module.exports = (env, argv) => {
         short_name: 'Portfolio',
         description: 'Junior Frontend Developer Portfolio',
         background_color: '#ffffff'
-      })
+      }),
+      new Dotenv()
     ]
-  }
+  };
   // Production config
   if (argv.mode === 'production') {
     config.plugins.push(
@@ -134,8 +136,8 @@ module.exports = (env, argv) => {
         }
       ]),
       new BundleAnalyzerPlugin()
-    )
-    return config
+    );
+    return config;
   }
   // Development config
   config.devServer = {
@@ -148,7 +150,7 @@ module.exports = (env, argv) => {
     hot: true,
     // Redirect 404s to /index.html
     historyApiFallback: true
-  }
-  config.plugins.push(new webpack.HotModuleReplacementPlugin())
-  return config
-}
+  };
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+  return config;
+};
