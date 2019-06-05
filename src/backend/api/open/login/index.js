@@ -1,13 +1,13 @@
-const db = require('../../../db/mongo')
-const security = require('../../../utility/security')
+const db = require('../../../db/mongo');
+const security = require('../../../utility/security');
 
 module.exports = function(request) {
   return new Promise((resolve, reject) => {
-    const { username, password } = request.body
+    const { username, password } = request.body;
     const result = {
       success: false,
       message: ''
-    }
+    };
 
     // If username and password fields filled, check database.
     // Else, send error.
@@ -30,10 +30,10 @@ module.exports = function(request) {
           // If the user is exist, generate a new token hash.
           // Else, send error.
           if (userResult && userResult.length > 0) {
-            const tokenHash = security.genRandomString(40)
-            const loginTime = new Date()
+            const tokenHash = security.genRandomString(40);
+            const loginTime = new Date();
 
-            const difference = loginTime - userResult[0].lastTry
+            const difference = loginTime - userResult[0].lastTry;
 
             // If the last login try is more than 2 seconds ago, generate a new token hash.
             // Else, send DDOS error.
@@ -47,11 +47,11 @@ module.exports = function(request) {
                   userResult[0].salt
                 )
               ) {
-                const newPass = security.saltHashPassword(password)
+                const newPass = security.saltHashPassword(password);
                 const tokenItem = {
                   token: tokenHash,
                   time: loginTime
-                }
+                };
                 db.UpdateDB(
                   'users',
                   { _id: userResult[0]._id },
@@ -59,6 +59,7 @@ module.exports = function(request) {
                     $push: {
                       tokens: {
                         $each: [tokenItem],
+                        // Keep last 5 token sessions
                         $slice: -5
                       }
                     },
@@ -71,25 +72,25 @@ module.exports = function(request) {
                   }
                 )
                   .then(function() {
-                    result.success = true
-                    result.message = ''
+                    result.success = true;
+                    result.message = '';
                     result.user = {
                       username: username,
                       name: userResult[0].name,
                       surname: userResult[0].surname
-                    }
-                    result.session = tokenHash
-                    resolve(result)
+                    };
+                    result.session = tokenHash;
+                    resolve(result);
                   })
                   .catch(() => {
-                    result.success = false
-                    result.message = 'Login Error'
-                    reject(result)
-                  })
+                    result.success = false;
+                    result.message = 'Login Error';
+                    reject(result);
+                  });
               } else {
-                result.success = false
-                result.message = 'Login Error'
-                reject(result)
+                result.success = false;
+                result.message = 'Login Error';
+                reject(result);
               }
             } else {
               db.UpdateDB(
@@ -100,33 +101,33 @@ module.exports = function(request) {
                 }
               )
                 .then(() => {
-                  result.success = false
-                  result.ddos = true
-                  result.message = 'Login Error DDOS'
-                  reject(result)
+                  result.success = false;
+                  result.ddos = true;
+                  result.message = 'Login Error DDOS';
+                  reject(result);
                 })
                 .catch(() => {
-                  result.success = false
-                  result.ddos = true
-                  result.message = 'Login Error DDOS'
-                  reject(result)
-                })
+                  result.success = false;
+                  result.ddos = true;
+                  result.message = 'Login Error DDOS';
+                  reject(result);
+                });
             }
           } else {
-            result.success = false
-            result.message = 'Login Error'
-            reject(result)
+            result.success = false;
+            result.message = 'Login Error';
+            reject(result);
           }
         })
         .catch(err => {
-          result.success = false
-          result.message = err
-          reject(result)
-        })
+          result.success = false;
+          result.message = err;
+          reject(result);
+        });
     } else {
-      result.success = false
-      result.message = 'Login Error'
-      reject(result)
+      result.success = false;
+      result.message = 'Login Error';
+      reject(result);
     }
-  })
-}
+  });
+};
