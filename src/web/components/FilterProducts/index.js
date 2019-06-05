@@ -58,7 +58,13 @@ export default class FilterProducts extends PureComponent {
 
   handleSubmit = e => {
     const { handleFilter } = this.props;
-    const { avg, price, stock, ...companies } = this.state;
+    const {
+      avg,
+      price,
+      stock,
+      companyNamesAndProductsQuantitiesList,
+      ...companies
+    } = this.state;
     const priceRange = priceRanges[price];
 
     handleFilter({
