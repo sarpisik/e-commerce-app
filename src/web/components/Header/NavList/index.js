@@ -1,9 +1,9 @@
-import React from 'react'
-import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, Navbar } from 'react-bootstrap'
-import Icon from '../../Icon'
-import * as ROUTES from '../../../constants/routes'
-import './index.css'
+import React from 'react';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
+import Icon from '../../Icon';
+import * as ROUTES from '../../../constants/routes';
+import './index.css';
 
 const NavList = () => {
   return (
@@ -21,7 +21,7 @@ const NavList = () => {
               <Icon icon="shopping-cart" />
             </Nav.Link>
           </LinkContainer>
-          <LinkContainer to={ROUTES.SESSION}>
+          <LinkContainer to={ROUTES.LOGIN}>
             <Nav.Link>
               <Icon icon="user" />
             </Nav.Link>
@@ -30,7 +30,7 @@ const NavList = () => {
         </Nav>
       </Navbar.Collapse>
     </>
-  )
-}
+  );
+};
 
-export default NavList
+export default NavList;

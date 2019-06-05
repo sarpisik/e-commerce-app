@@ -1,6 +1,6 @@
-import React, { lazy } from 'react'
-import * as ROUTES from '../../constants/routes'
-import { extractStringQuery } from '../Helpers'
+import React, { lazy } from 'react';
+import * as ROUTES from '../../constants/routes';
+import { extractStringQuery } from '../Helpers';
 
 const Pages = {
   [ROUTES.CATEGORIES]: lazy(() =>
@@ -14,15 +14,18 @@ const Pages = {
   [ROUTES.PRODUCT]: lazy(() =>
     import(/* webpackChunkName: "ProductPage" */ '../../pages/product')
   ),
-  [ROUTES.SESSION]: lazy(() =>
+  [ROUTES.LOGIN]: lazy(() =>
     import(/* webpackChunkName: "LoginPage" */ '../../pages/login')
+  ),
+  [ROUTES.SIGN_UP]: lazy(() =>
+    import(/* webpackChunkName: "SignUpPage" */ '../../pages/signUp')
   )
-}
+};
 
 const PageLoader = props => {
-  const Component = Pages[props.match.params.pageId]
-  const searchQuery = extractStringQuery(props.location.search)
-  return <Component {...searchQuery} {...props} />
-}
+  const Component = Pages[props.match.params.pageId];
+  const searchQuery = extractStringQuery(props.location.search);
+  return <Component {...searchQuery} {...props} />;
+};
 
-export default PageLoader
+export default PageLoader;

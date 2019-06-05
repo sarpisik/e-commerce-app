@@ -1,61 +1,61 @@
-import React, { PureComponent } from 'react'
-import { withRouter } from 'react-router-dom'
-import * as ROUTES from '../../constants/routes'
-import { Row, Col, Button, ButtonGroup } from 'react-bootstrap'
+import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router-dom';
+import * as ROUTES from '../../constants/routes';
+import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import {
   updateImageSizesOfProducts,
   getWindowSize,
   compareNumbers
-} from '../Helpers'
-import Spinner from '../Spinner'
-import Icon from '../Icon'
-import ProductSlide from './ProductSlide'
-import { areImagesLoaded } from '../Image'
-import ProductInfo from './ProductInfo'
-import { ReviewStarsForProductPage } from '..'
-import ColorsList from './ColorsList'
-import AddToCartOrBuy from './AddToCartOrBuy'
+} from '../Helpers';
+import Spinner from '../Spinner';
+import Icon from '../Icon';
+import ProductSlide from './ProductSlide';
+import { areImagesLoaded } from '../Image';
+import ProductInfo from './ProductInfo';
+import { ReviewStarsForProductPage } from '..';
+import ColorsList from './ColorsList';
+import AddToCartOrBuy from './AddToCartOrBuy';
 
-const maxHeightAndWidth = 400
+const maxHeightAndWidth = 400;
 
 class Product extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.productPictureSrc = updateImageSizesOfProducts(
       props.product,
       maxHeightAndWidth
-    ).picture
-    this.productIndex = props.product.index
-    this.spinnerContainerHeight = getWindowSize().sort(compareNumbers)
+    ).picture;
+    this.productIndex = props.product.index;
+    this.spinnerContainerHeight = getWindowSize().sort(compareNumbers);
 
     this.state = {
       isLoading: true,
       pictures: setProductImage(this.productPictureSrc, this.productIndex),
       orderCount: 1,
       activeColorIndex: 0
-    }
+    };
   }
 
   onImagesLoad = () => {
-    const carouselElement = document.querySelector('.carousel.slide')
-    this.setState({ isLoading: !areImagesLoaded(carouselElement) })
-  }
+    const carouselElement = document.querySelector('.carousel.slide');
+    this.setState({ isLoading: !areImagesLoaded(carouselElement) });
+  };
 
   adjustDimensions = () =>
     this.spinnerContainerHeight[1] > maxHeightAndWidth
       ? maxHeightAndWidth
-      : this.spinnerContainerHeight[1]
+      : this.spinnerContainerHeight[1];
 
   handleColorSelect = value => {
-    const activeColorIndex = value
-    this.setState({ activeColorIndex })
-  }
+    const activeColorIndex = value;
+    this.setState({ activeColorIndex });
+  };
 
   handleOrderCount = ({ target }) => {
     this.setState(({ orderCount }) => ({
       orderCount: target.name === 'increase' ? orderCount + 1 : orderCount - 1
-    }))
-  }
+    }));
+  };
 
   handleSubmit = ({ target }) => {
     // If user logged in, handle submit.
@@ -64,49 +64,47 @@ class Product extends PureComponent {
       ? target.name === 'cart'
         ? this.handleAddToCart()
         : this.handleBuy()
-      : this.handleNavigate(ROUTES.SESSION)
-  }
+      : this.handleNavigate(ROUTES.LOGIN);
+  };
 
   handleAddToCart = () => {
     const {
       addToCart,
       productId,
       product: { colors }
-    } = this.props
-    const { orderCount, activeColorIndex } = this.state
-    const orderColor = colors[activeColorIndex]
+    } = this.props;
+    const { orderCount, activeColorIndex } = this.state;
+    const orderColor = colors[activeColorIndex];
 
-    addToCart(productId, orderCount, orderColor)
-  }
+    addToCart(productId, orderCount, orderColor);
+  };
 
   handleBuy = () => {
-    this.handleAddToCart()
-    this.handleNavigate(ROUTES.CART)
-  }
+    this.handleAddToCart();
+    this.handleNavigate(ROUTES.CART);
+  };
 
   handleNavigate = (route, state = false) =>
-    this.props.history.push(route, state)
+    this.props.history.push(route, state);
 
   handleAddToFavorites = () => {
-    const { authUser, addFavorite, productId } = this.props
-    authUser
-      ? addFavorite(productId)
-      : this.handleNavigate(ROUTES.SESSION, true)
-  }
+    const { authUser, addFavorite, productId } = this.props;
+    authUser ? addFavorite(productId) : this.handleNavigate(ROUTES.LOGIN, true);
+  };
 
   handleRemoveFavorite = () => {
-    const { authUser, removeFavorite, productId } = this.props
+    const { authUser, removeFavorite, productId } = this.props;
     authUser
       ? removeFavorite(productId)
-      : this.handleNavigate(ROUTES.SESSION, true)
-  }
+      : this.handleNavigate(ROUTES.LOGIN, true);
+  };
 
   render() {
-    const { authUser, productId, product } = this.props
-    const { isLoading, pictures, orderCount, activeColorIndex } = this.state
+    const { authUser, productId, product } = this.props;
+    const { isLoading, pictures, orderCount, activeColorIndex } = this.state;
 
     const isInFavorites =
-      authUser && authUser.favorites.find(({ _id }) => _id === productId)
+      authUser && authUser.favorites.find(({ _id }) => _id === productId);
 
     return (
       <>
@@ -159,11 +157,11 @@ class Product extends PureComponent {
         </Row>
         <AboutProduct about={product.about} />
       </>
-    )
+    );
   }
 }
 
-export default withRouter(Product)
+export default withRouter(Product);
 
 function setProductImage(src, index) {
   const pictures = [
@@ -171,13 +169,13 @@ function setProductImage(src, index) {
     src.replace(index, index + 1),
     src.replace(index, index + 2),
     src.replace(index, index + 3)
-  ]
-  return pictures
+  ];
+  return pictures;
 }
 
 // Child Components
 function Title({ title }) {
-  return <ProductInfo className="m-0" description={title} />
+  return <ProductInfo className="m-0" description={title} />;
 }
 function ReviewRatings({ average }) {
   return (
@@ -190,7 +188,7 @@ function ReviewRatings({ average }) {
         </>
       }
     />
-  )
+  );
 }
 function Price({ currency, price }) {
   return (
@@ -199,7 +197,7 @@ function Price({ currency, price }) {
       label="Price:"
       description={currency + '' + price}
     />
-  )
+  );
 }
 function ShippingDetails() {
   return (
@@ -209,17 +207,17 @@ function ShippingDetails() {
       description={`0.19$ to your country via unregistered air mail.
           Ship between: date1 - date2. Estimated Shipping in N business days.`}
     />
-  )
+  );
 }
 function StockInfo({ isStock, quantity }) {
-  const description = isStock ? quantity : 'Out Of Stock'
+  const description = isStock ? quantity : 'Out Of Stock';
   return (
     <ProductInfo className="m-0" label="In Stock" description={description} />
-  )
+  );
 }
 function OrderCount({ orderCount, stockQuantity, onChangeAmount }) {
-  const isIncreaseDisabled = orderCount > stockQuantity
-  const isDecreaseDisabled = orderCount < 2
+  const isIncreaseDisabled = orderCount > stockQuantity;
+  const isDecreaseDisabled = orderCount < 2;
   return (
     <ProductInfo
       className="m-0"
@@ -242,7 +240,7 @@ function OrderCount({ orderCount, stockQuantity, onChangeAmount }) {
         </ButtonGroup>
       }
     />
-  )
+  );
 }
 function AddToFavorites({ handleClick }) {
   return (
@@ -254,7 +252,7 @@ function AddToFavorites({ handleClick }) {
         </Button>
       }
     />
-  )
+  );
 }
 function RemoveFromFavorites({ handleClick }) {
   return (
@@ -266,7 +264,7 @@ function RemoveFromFavorites({ handleClick }) {
         </Button>
       }
     />
-  )
+  );
 }
 function AboutProduct({ about }) {
   return (
@@ -276,5 +274,5 @@ function AboutProduct({ about }) {
       labelSizes={[12, 12]}
       description={about}
     />
-  )
+  );
 }

@@ -1,15 +1,15 @@
-import React from 'react'
-import { withRouter } from 'react-router-dom'
-import withForm from '../HOCs/withForm'
-import { Form, Button } from 'react-bootstrap'
-import * as ROUTES from '../../constants/routes'
+import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import withForm from '../HOCs/withForm';
+import { Form, Button } from 'react-bootstrap';
+import * as ROUTES from '../../constants/routes';
 
 const INITIAL_STATE = {
   email: '',
   password: '',
   keepLoggedIn: false,
   isLoading: false
-}
+};
 
 // demo user
 const authUser = {
@@ -27,27 +27,27 @@ const authUser = {
       _id: '5ccd8c0b341b7e4da62404ee'
     }
   ]
-}
+};
 
 const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
-  const { email, password, keepLoggedIn, isLoading } = props
-  console.log(props.history)
+  const { email, password, keepLoggedIn, isLoading } = props;
+  console.log(props.history);
   const onSubmit = e => {
-    e.preventDefault()
+    e.preventDefault();
     onUpdate({
       isLoading: true
-    })
+    });
     const formValues = {
       email,
       password,
       keepLoggedIn
-    }
-    console.log(formValues)
+    };
+    console.log(formValues);
     simulateNetworkRequest()
       .then(() => {
-        authUser.email = email
-        authUser.password = password
-        handleLogin(authUser)
+        authUser.email = email;
+        authUser.password = password;
+        handleLogin(authUser);
       })
       .then(() =>
         onUpdate({
@@ -58,9 +58,9 @@ const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
       .then(() => {
         props.location.state
           ? props.history.goBack()
-          : props.history.replace(ROUTES.CART)
-      })
-  }
+          : props.history.replace(ROUTES.CART);
+      });
+  };
 
   return (
     <Form onSubmit={onSubmit}>
@@ -94,15 +94,18 @@ const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
           checked={keepLoggedIn}
         />
       </Form.Group>
+      <p>
+        Don't have account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+      </p>
       <Button variant="primary" type="submit" disabled={isLoading}>
         {isLoading ? 'Sending... Please do not close the page.' : 'Send'}
       </Button>
     </Form>
-  )
-}
+  );
+};
 
-export default withRouter(withForm(INITIAL_STATE)(LoginForm))
+export default withRouter(withForm(INITIAL_STATE)(LoginForm));
 
 function simulateNetworkRequest() {
-  return new Promise(resolve => setTimeout(resolve, 2000))
+  return new Promise(resolve => setTimeout(resolve, 2000));
 }
