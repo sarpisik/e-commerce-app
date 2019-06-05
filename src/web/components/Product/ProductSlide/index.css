@@ -1,0 +1,6 @@
+#product .carousel-item-next,
+#product .carousel-item.active,
+#product .carousel-item-prev {
+  display: flex;
+  align-items: center;
+}

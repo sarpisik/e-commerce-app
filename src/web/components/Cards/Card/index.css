@@ -1,0 +1,18 @@
+.custom-card {
+  flex: 1 0 0%;
+}
+.custom-card.card {
+  border-radius: 0;
+}
+.custom-card:first-of-type {
+  border-bottom-left-radius: 0.25rem;
+}
+.custom-card:last-child {
+  border-bottom-right-radius: 0.25rem;
+}
+.custom-card-img {
+  height: auto;
+  width: auto;
+  max-height: 270px;
+  max-width: 200px;
+}

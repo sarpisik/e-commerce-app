@@ -1,0 +1,16 @@
+.side-bar-children {
+  display: none;
+}
+.side-bar-toggler.active .side-bar-children {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .side-bar-toggler .toggle-button {
+    display: none;
+  }
+  .side-bar-children,
+  .side-bar-toggler.active .side-bar-children {
+    display: block;
+  }
+}

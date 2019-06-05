@@ -1,0 +1,5 @@
+@media (min-width: 477px) {
+  .navbar-toggler {
+    order: 2;
+  }
+}
