@@ -1,38 +1,37 @@
-const db = require('../../db/mongo')
+const db = require('../../db/mongo');
+const helpers = require('../helpers');
 
-const checkSession = (session, username) => {
+const { rejectHandler } = helpers;
+
+const checkSession = (session, email) => {
   return new Promise((resolve, reject) => {
-    const result = {
+    const respond = {
       success: false,
       message: 'No reason'
-    }
+    };
 
     db.ReadDB(
       'users',
       {
-        username: username,
+        email,
         'tokens.token': session
       },
-      { _id: 1, username: 1, tokens: 1 }
+      { _id: 1, email: 1, tokens: 1 }
     )
       .then(userInfo => {
-        // If the username and token are valid, respond success.
+        // If the email and token are valid, respond success.
         // Else, token error.
         if (userInfo.length > 0) {
-          result.success = true
-          resolve(result)
+          respond.success = true;
+          resolve(respond);
         } else {
-          result.message = 'Invalid Token'
-          reject(result)
+          reject(rejectHandler(respond, 'Invalid Token'));
         }
       })
-      .catch(() => {
-        result.message = 'Invalid Token'
-        reject(result)
-      })
-  })
-}
+      .catch(() => reject(rejectHandler(respond, 'Invalid Token')));
+  });
+};
 
 module.exports = {
   checkSession
-}
+};

@@ -5,7 +5,8 @@ import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import {
   updateImageSizesOfProducts,
   getWindowSize,
-  compareNumbers
+  compareNumbers,
+  backend
 } from '../Helpers';
 import Spinner from '../Spinner';
 import Icon from '../Icon';
@@ -87,16 +88,29 @@ class Product extends PureComponent {
   handleNavigate = (route, state = false) =>
     this.props.history.push(route, state);
 
-  handleAddToFavorites = () => {
-    const { authUser, addFavorite, productId } = this.props;
-    authUser ? addFavorite(productId) : this.handleNavigate(ROUTES.LOGIN, true);
-  };
-
-  handleRemoveFavorite = () => {
-    const { authUser, removeFavorite, productId } = this.props;
-    authUser
-      ? removeFavorite(productId)
-      : this.handleNavigate(ROUTES.LOGIN, true);
+  toggleFavorite = (addToFavorites = false) => {
+    const { authUser, addFavorite, removeFavorite, productId } = this.props;
+    if (authUser) {
+      this.setState({ isLoading: true });
+      const favorites = addToFavorites
+        ? [...authUser.favorites, productId]
+        : authUser.favorites.filter(id => id !== productId);
+      // api call
+      backend(process.env.API_AUTH_USER_UPDATE, {
+        email: authUser.email,
+        session: authUser.session,
+        favorites
+      }).then(({ success, message }) => {
+        if (success) {
+          addToFavorites ? addFavorite(productId) : removeFavorite(productId);
+        } else {
+          alert(message);
+        }
+        this.setState({ isLoading: false });
+      });
+    } else {
+      this.handleNavigate(ROUTES.LOGIN, true);
+    }
   };
 
   render() {
@@ -104,7 +118,7 @@ class Product extends PureComponent {
     const { isLoading, pictures, orderCount, activeColorIndex } = this.state;
 
     const isInFavorites =
-      authUser && authUser.favorites.find(({ _id }) => _id === productId);
+      authUser && authUser.favorites.find(_id => _id === productId);
 
     return (
       <>
@@ -148,11 +162,11 @@ class Product extends PureComponent {
               handleSubmit={this.handleSubmit}
               disabled={!product.isActive}
             />
-            {isInFavorites ? (
-              <RemoveFromFavorites handleClick={this.handleRemoveFavorite} />
-            ) : (
-              <AddToFavorites handleClick={this.handleAddToFavorites} />
-            )}
+            <ToggleFavorite
+              isLoading={isLoading}
+              isInFavorites={isInFavorites}
+              onClickToggle={this.toggleFavorite}
+            />
           </Col>
         </Row>
         <AboutProduct about={product.about} />
@@ -241,6 +255,12 @@ function OrderCount({ orderCount, stockQuantity, onChangeAmount }) {
       }
     />
   );
+}
+function ToggleFavorite({ isLoading, isInFavorites, onClickToggle }) {
+  if (isLoading) return <p>Please wait...</p>;
+  if (isInFavorites)
+    return <RemoveFromFavorites handleClick={() => onClickToggle()} />;
+  return <AddToFavorites handleClick={() => onClickToggle(true)} />;
 }
 function AddToFavorites({ handleClick }) {
   return (

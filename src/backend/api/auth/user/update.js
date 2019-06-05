@@ -1,17 +1,20 @@
-const db = require('../../../db/mongo')
+const db = require('../../../db/mongo');
+const helpers = require('../../../utility/helpers');
+
+const { rejectHandler } = helpers;
 
 module.exports = function(request, response) {
   return new Promise((resolve, reject) => {
-    const { username, name, surname } = request.body
-    const result = {
+    const { email, ...attributesToUpdate } = request.body;
+    const respond = {
       success: false,
       message: ''
-    }
+    };
 
     // If the fields are not empty, check db.
     // Else, send error.
-    if (username && name && surname) {
-      db.ReadDB('users', { username }, {})
+    if (email) {
+      db.ReadDB('users', { email }, {})
         .then(userResult => {
           // If the user is exist in db, update the fields and respond success.
           // Else, send error.
@@ -20,34 +23,23 @@ module.exports = function(request, response) {
               'users',
               { _id: userResult[0]._id },
               {
-                $set: { name: name, surname: surname }
+                $set: { ...attributesToUpdate }
               }
             )
-              .then(() => {
-                result.success = true
-                result.message = ''
-                resolve(result)
+              .then(res => {
+                respond.res = res;
+                respond.success = true;
+                respond.message = '';
+                resolve(respond);
               })
-              .catch(() => {
-                result.success = false
-                result.message = 'Error'
-                reject(result)
-              })
+              .catch(err => reject(rejectHandler(respond, err)));
           } else {
-            result.success = false
-            result.message = 'Error'
-            reject(result)
+            reject(rejectHandler(respond, 'Invalid Email'));
           }
         })
-        .catch(() => {
-          result.success = false
-          result.message = 'Error'
-          reject(result)
-        })
+        .catch(err => reject(rejectHandler(respond, err)));
     } else {
-      result.success = false
-      result.message = 'Error'
-      reject(result)
+      reject(rejectHandler(respond, 'Invalid Email'));
     }
-  })
-}
+  });
+};

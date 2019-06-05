@@ -4,7 +4,7 @@ import withForm from '../HOCs/withForm';
 import { Form, Button } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
 
-// TODO: Show feedback of form submit
+// TODO: Show feedback on form submit
 
 const INITIAL_STATE = {
   email: '',

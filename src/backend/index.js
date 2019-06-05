@@ -51,17 +51,17 @@ db.OpenDB()
 
     // Respond authUser info on a valid session(token).
     app.post(['/api/auth', '/api/auth*'], (request, response, next) => {
-      const { username, session } = request.body;
+      const { email, session } = request.body;
 
       // Convert API path to local path
       const requestRedirect = require('./api/auth' +
         request.url.replace('/api/auth', ''));
 
-      // If the username and session(token) are valid, respond user data.
+      // If the email and session(token) are valid, respond user data.
       // Else, respond error.
-      if (username && session) {
+      if (email && session) {
         sessionUtil
-          .checkSession(session, username)
+          .checkSession(session, email)
           .then(() => {
             requestRedirect(request, response)
               .then(result => {
