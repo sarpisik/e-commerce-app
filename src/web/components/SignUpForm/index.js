@@ -4,6 +4,8 @@ import withForm from '../HOCs/withForm';
 import { Form, Button } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
 
+// TODO: Show feedback of form submit
+
 const INITIAL_STATE = {
   email: '',
   userName: '',
@@ -27,24 +29,20 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
         password2
       };
       simulateNetworkRequest(formValues)
-        .then(response => response.json())
-        .then(authUser => {
-          console.log(authUser);
-          // authUser.email = email;
-          // authUser.password = password;
-          // handleLogin(authUser);
-        })
-        .then(() =>
+        .then(({ success, message, ...authUser }) => {
           onUpdate({
             isLoading: false
-          })
-        )
-        .then(() => onReset())
-        // .then(() => {
-        //   props.location.state
-        //     ? props.history.goBack()
-        //     : props.history.replace(ROUTES.CART);
-        // })
+          });
+          if (success) {
+            handleLogin({ ...authUser });
+            onReset();
+            props.location.state
+              ? props.history.goBack()
+              : props.history.replace(ROUTES.CART);
+          } else {
+            alert(message);
+          }
+        })
         .catch(err => {
           console.error(err);
         });
@@ -107,5 +105,5 @@ function simulateNetworkRequest(formValues) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(formValues)
-  });
+  }).then(response => response.json());
 }

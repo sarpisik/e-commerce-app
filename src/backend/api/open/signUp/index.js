@@ -34,12 +34,13 @@ module.exports = function(request) {
                 salt: cryptoInfo.salt,
                 lastLogin: '',
                 tokens: [],
-                lastTry: ''
+                lastTry: '',
+                favorites: []
               }
             ])
               .then(resp => {
                 // Create a session token.
-                tokenGenerator(resp.ops, respond, userName, password)
+                tokenGenerator(resp.ops, respond, email, password)
                   // Send user infos and token hash
                   .then(respond => resolve(respond))
                   .catch(err => reject(err));

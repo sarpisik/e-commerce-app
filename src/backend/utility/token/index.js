@@ -4,6 +4,8 @@ const helpers = require('../helpers');
 
 const { rejectHandler } = helpers;
 
+const attributesToSendClient = ['email', 'userName', 'favorites', 'lastLogin'];
+
 module.exports = function(userResult, respond, email, password) {
   return new Promise((resolve, reject) => {
     const tokenHash = security.genRandomString(40);
@@ -49,17 +51,16 @@ module.exports = function(userResult, respond, email, password) {
         )
           .then(() => {
             respond.success = true;
-            respond.message = '';
-            respond.user = {
-              email,
-              name: userResult[0].name
-            };
             // This token will be used for backend access
             respond.session = tokenHash;
+            attributesToSendClient.forEach(key => {
+              respond[key] = userResult[0][key];
+            });
             resolve(respond);
           })
-          .catch(() => {
-            reject(rejectHandler(respond, 'Login Error'));
+          .catch(err => {
+            console.log(err);
+            reject(rejectHandler(respond, err));
           });
       } else {
         reject(rejectHandler(respond, 'Wrong Password'));

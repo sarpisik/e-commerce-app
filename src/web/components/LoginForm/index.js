@@ -31,7 +31,6 @@ const authUser = {
 
 const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
   const { email, password, keepLoggedIn, isLoading } = props;
-  console.log(props.history);
   const onSubmit = e => {
     e.preventDefault();
     onUpdate({
@@ -42,24 +41,22 @@ const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
       password,
       keepLoggedIn
     };
-    console.log(formValues);
-    simulateNetworkRequest()
-      .then(() => {
-        authUser.email = email;
-        authUser.password = password;
-        handleLogin(authUser);
-      })
-      .then(() =>
+    simulateNetworkRequest(formValues).then(
+      ({ success, message, ...authUser }) => {
         onUpdate({
           isLoading: false
-        })
-      )
-      .then(() => onReset())
-      .then(() => {
-        props.location.state
-          ? props.history.goBack()
-          : props.history.replace(ROUTES.CART);
-      });
+        });
+        if (success) {
+          handleLogin(authUser);
+          onReset();
+          props.location.state
+            ? props.history.goBack()
+            : props.history.replace(ROUTES.CART);
+        } else {
+          alert(message);
+        }
+      }
+    );
   };
 
   return (
@@ -106,6 +103,12 @@ const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
 
 export default withRouter(withForm(INITIAL_STATE)(LoginForm));
 
-function simulateNetworkRequest() {
-  return new Promise(resolve => setTimeout(resolve, 2000));
+function simulateNetworkRequest(formValues) {
+  return fetch(process.env.API_LOGIN, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formValues)
+  }).then(response => response.json());
 }
