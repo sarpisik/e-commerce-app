@@ -1,7 +1,10 @@
 const db = require('../../db/mongo');
 const security = require('../security');
+const helpers = require('../helpers');
 
-module.exports = function(userResult, respond, userName, password) {
+const { rejectHandler } = helpers;
+
+module.exports = function(userResult, respond, email, password) {
   return new Promise((resolve, reject) => {
     const tokenHash = security.genRandomString(40);
     const loginTime = new Date();
@@ -48,7 +51,7 @@ module.exports = function(userResult, respond, userName, password) {
             respond.success = true;
             respond.message = '';
             respond.user = {
-              userName,
+              email,
               name: userResult[0].name
             };
             // This token will be used for backend access
@@ -56,14 +59,10 @@ module.exports = function(userResult, respond, userName, password) {
             resolve(respond);
           })
           .catch(() => {
-            respond.success = false;
-            respond.message = 'Login Error';
-            reject(respond);
+            reject(rejectHandler(respond, 'Login Error'));
           });
       } else {
-        respond.success = false;
-        respond.message = 'Login Error';
-        reject(respond);
+        reject(rejectHandler(respond, 'Wrong Password'));
       }
     } else {
       db.UpdateDB(
@@ -74,16 +73,10 @@ module.exports = function(userResult, respond, userName, password) {
         }
       )
         .then(() => {
-          respond.success = false;
-          respond.ddos = true;
-          respond.message = 'Login Error DDOS';
-          reject(respond);
+          reject(rejectHandler(respond, 'Login Error DDOS'));
         })
         .catch(() => {
-          respond.success = false;
-          respond.ddos = true;
-          respond.message = 'Login Error DDOS';
-          reject(respond);
+          reject(rejectHandler(respond, 'Login Error DDOS'));
         });
     }
   });
