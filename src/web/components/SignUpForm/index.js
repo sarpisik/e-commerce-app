@@ -13,35 +13,40 @@ const INITIAL_STATE = {
 };
 
 const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
-  const { email, password, keepLoggedIn, isLoading } = props;
+  const { email, userName, password, password2, isLoading } = props;
   const onSubmit = e => {
     e.preventDefault();
-    onUpdate({
-      isLoading: true
-    });
-    const formValues = {
-      email,
-      password,
-      keepLoggedIn
-    };
-    console.log(formValues);
-    simulateNetworkRequest()
-      .then(() => {
-        authUser.email = email;
-        authUser.password = password;
-        handleLogin(authUser);
-      })
-      .then(() =>
-        onUpdate({
-          isLoading: false
-        })
-      )
-      .then(() => onReset())
-      .then(() => {
-        props.location.state
-          ? props.history.goBack()
-          : props.history.replace(ROUTES.CART);
+    if ((email, userName, password, password2 && password === password2)) {
+      onUpdate({
+        isLoading: true
       });
+      const formValues = {
+        email,
+        userName,
+        password,
+        password2
+      };
+      simulateNetworkRequest(formValues)
+        .then(authUser => {
+          console.log(authUser);
+          // authUser.email = email;
+          // authUser.password = password;
+          // handleLogin(authUser);
+        })
+        .then(() =>
+          onUpdate({
+            isLoading: false
+          })
+        )
+        .then(() => onReset())
+        .then(() => {
+          props.location.state
+            ? props.history.goBack()
+            : props.history.replace(ROUTES.CART);
+        });
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -91,6 +96,12 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
 
 export default withRouter(withForm(INITIAL_STATE)(SignUpForm));
 
-function simulateNetworkRequest() {
-  return new Promise(resolve => setTimeout(resolve, 2000));
+function simulateNetworkRequest(formValues) {
+  return fetch(process.env.API_SIGN_UP, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formValues)
+  });
 }
