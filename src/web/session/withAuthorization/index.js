@@ -19,7 +19,7 @@ const withAuthorization = condition => route => Component => {
       if (condition && authUser) {
         const { email, session } = authUser;
         // Request user credentials + user cart items list
-        apiCall(process.env.API_AUTH_USER_CART, {
+        apiCall(process.env.API_AUTH_USER_INFO, {
           email,
           session
         })

@@ -14,7 +14,8 @@ function userCredentialsToSend(respond, userResult) {
     'email',
     'userName',
     'favorites',
-    'lastLogin'
+    'lastLogin',
+    'cart'
   ];
   attributesToSendClient.forEach(credential => {
     respond[credential] = userResult[credential];
