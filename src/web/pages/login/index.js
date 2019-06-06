@@ -1,7 +1,7 @@
-import React from 'react'
-import { LoginForm } from '../../containers'
-import { Container, Row, Col } from 'react-bootstrap'
-import './index.css'
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import './index.css';
+import { LoginForm } from '../../components';
 
 const LoginPage = () => {
   return (
@@ -17,7 +17,7 @@ const LoginPage = () => {
         </Col>
       </Row>
     </Container>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

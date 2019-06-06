@@ -28,12 +28,10 @@ import store from './state/store';
 import App from './App';
 // UI
 import './index.css';
-import { getAuthUser } from './state/actions/session';
 
 // Token ID
 const sessionObject = {};
 // Fetch authUser data
-// sessionObject && store.dispatch(getAuthUser(sessionObject))
 
 ReactDOM.render(
   <Provider store={store}>

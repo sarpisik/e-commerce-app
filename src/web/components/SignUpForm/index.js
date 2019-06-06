@@ -1,8 +1,8 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import withForm from '../HOCs/withForm';
 import { Form, Button } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
+import withAuthUser from '../../session/withAuthUser';
 
 // TODO: Show feedback on form submit
 
@@ -14,38 +14,57 @@ const INITIAL_STATE = {
   isLoading: false
 };
 
-const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
+const SignUpForm = ({
+  onChange,
+  onUpdate,
+  onReset,
+  apiCall,
+  handleLogin,
+  ...props
+}) => {
+  // withForm state
   const { email, userName, password, password2, isLoading } = props;
   const onSubmit = e => {
     e.preventDefault();
+
+    // If the fields are validated, make API call.
+    // Else, null.
     if ((email, userName, password, password2 && password === password2)) {
+      // Show loading feedback.
       onUpdate({
         isLoading: true
       });
+
       const formValues = {
         email,
         userName,
         password,
         password2
       };
-      simulateNetworkRequest(formValues)
+
+      apiCall(process.env.API_SIGN_UP, formValues)
         .then(({ success, message, ...authUser }) => {
+          // Show off loading feedback.
           onUpdate({
             isLoading: false
           });
+          // If the user signed up successfully...
           if (success) {
-            handleLogin({ ...authUser });
+            // Set user credentials to redux store
+            handleLogin(authUser);
+            // Reset the form.
             onReset();
+            // If the user navigated to here from somewhere, send back.
+            // Else, replace to cart page.
             props.location.state
               ? props.history.goBack()
               : props.history.replace(ROUTES.CART);
           } else {
+            // Show why sign up failed.
             alert(message);
           }
         })
-        .catch(err => {
-          console.error(err);
-        });
+        .catch(err => console.error(err));
     } else {
       return null;
     }
@@ -96,14 +115,4 @@ const SignUpForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
   );
 };
 
-export default withRouter(withForm(INITIAL_STATE)(SignUpForm));
-
-function simulateNetworkRequest(formValues) {
-  return fetch(process.env.API_SIGN_UP, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(formValues)
-  }).then(response => response.json());
-}
+export default withAuthUser(withForm(INITIAL_STATE)(SignUpForm));

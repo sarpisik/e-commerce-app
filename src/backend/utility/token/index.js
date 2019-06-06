@@ -2,9 +2,7 @@ const db = require('../../db/mongo');
 const security = require('../security');
 const helpers = require('../helpers');
 
-const { rejectHandler } = helpers;
-
-const attributesToSendClient = ['email', 'userName', 'favorites', 'lastLogin'];
+const { rejectHandler, userCredentialsToSend } = helpers;
 
 module.exports = function(userResult, respond, email, password) {
   return new Promise((resolve, reject) => {
@@ -53,10 +51,8 @@ module.exports = function(userResult, respond, email, password) {
             respond.success = true;
             // This token will be used for backend access
             respond.session = tokenHash;
-            attributesToSendClient.forEach(key => {
-              respond[key] = userResult[0][key];
-            });
-            resolve(respond);
+            // Set credentials to send client
+            resolve(userCredentialsToSend(respond, userResult[0]));
           })
           .catch(err => {
             console.log(err);

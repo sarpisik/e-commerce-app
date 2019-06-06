@@ -65,6 +65,7 @@ db.OpenDB()
           .then(() => {
             requestRedirect(request, response)
               .then(result => {
+                result.session = session;
                 response.json(result);
                 next();
               })

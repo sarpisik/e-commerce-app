@@ -1,44 +1,34 @@
-const db = require('../../../db/mongo')
+const db = require('../../../db/mongo');
+const helpers = require('../../../utility/helpers');
+
+const { rejectHandler, userCredentialsToSend } = helpers;
 
 module.exports = function(request) {
   return new Promise((resolve, reject) => {
-    const { username } = request.body
-    const result = {
+    const { email } = request.body;
+    const respond = {
       success: false,
       message: ''
-    }
-    // If username is not empty, check db.
+    };
+    // If email is not empty, check db.
     // Else, send error.
-    if (username) {
-      db.ReadDB('users', { username }, {})
+    if (email) {
+      db.ReadDB('users', { email }, {})
         .then(userResult => {
           // If the user is exist in db, respond the user details.
           // Else, send error.
           if (userResult.length > 0) {
-            result.success = true
-            result.message = ''
-            result.userInfo = {}
-            result.userInfo.username = userResult[0].username
-            result.userInfo.name = userResult[0].name
-            result.userInfo.surname = userResult[0].surname
-            result.userInfo.lastLogin = userResult[0].lastLogin
-
-            resolve(result)
+            respond.success = true;
+            respond.message = '';
+            // Set credentials to send client
+            resolve(userCredentialsToSend(respond, userResult[0]));
           } else {
-            result.success = false
-            result.message = 'Error'
-            reject(result)
+            reject(rejectHandler(respond, 'User not valid.'));
           }
         })
-        .catch(() => {
-          result.success = false
-          result.message = 'Error'
-          reject(result)
-        })
+        .catch(err => reject(rejectHandler(respond, err)));
     } else {
-      result.success = false
-      result.message = 'Error'
-      reject(result)
+      reject(reject(rejectHandler(respond, 'Email is not valid.')));
     }
-  })
-}
+  });
+};

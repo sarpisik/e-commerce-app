@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
+import withAuthUser from '../../session/withAuthUser';
 import { withRouter } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import {
   updateImageSizesOfProducts,
   getWindowSize,
-  compareNumbers,
-  backend
+  compareNumbers
 } from '../Helpers';
 import Spinner from '../Spinner';
 import Icon from '../Icon';
@@ -65,7 +65,7 @@ class Product extends PureComponent {
       ? target.name === 'cart'
         ? this.handleAddToCart()
         : this.handleBuy()
-      : this.handleNavigate(ROUTES.LOGIN);
+      : this.props.handleNavigate(ROUTES.LOGIN);
   };
 
   handleAddToCart = () => {
@@ -82,21 +82,28 @@ class Product extends PureComponent {
 
   handleBuy = () => {
     this.handleAddToCart();
-    this.handleNavigate(ROUTES.CART);
+    this.props.handleNavigate(ROUTES.CART);
   };
 
   handleNavigate = (route, state = false) =>
     this.props.history.push(route, state);
 
   toggleFavorite = (addToFavorites = false) => {
-    const { authUser, addFavorite, removeFavorite, productId } = this.props;
+    const {
+      authUser,
+      apiCall,
+      handleNavigate,
+      addFavorite,
+      removeFavorite,
+      productId
+    } = this.props;
     if (authUser) {
       this.setState({ isLoading: true });
       const favorites = addToFavorites
         ? [...authUser.favorites, productId]
         : authUser.favorites.filter(id => id !== productId);
       // api call
-      backend(process.env.API_AUTH_USER_UPDATE, {
+      apiCall(process.env.API_AUTH_USER_UPDATE, {
         email: authUser.email,
         session: authUser.session,
         favorites
@@ -109,7 +116,7 @@ class Product extends PureComponent {
         this.setState({ isLoading: false });
       });
     } else {
-      this.handleNavigate(ROUTES.LOGIN, true);
+      handleNavigate(ROUTES.LOGIN, true);
     }
   };
 
@@ -174,8 +181,7 @@ class Product extends PureComponent {
     );
   }
 }
-
-export default withRouter(Product);
+export default withAuthUser(withRouter(Product));
 
 function setProductImage(src, index) {
   const pictures = [

@@ -1,16 +1,16 @@
-import React, { Component, Suspense } from 'react'
-import { Switch, Route, withRouter } from 'react-router-dom'
-import * as ROUTES from './constants/routes'
+import React, { Component, Suspense } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import * as ROUTES from './constants/routes';
 
-import { Home } from './containers'
-import { Header, PageLoader, Spinner } from './components'
+import { Home } from './containers';
+import { Header, PageLoader, Spinner } from './components';
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
   faStar as faStarRegular,
   faHeart as faHeartRegular
-} from '@fortawesome/free-regular-svg-icons'
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faHome,
   faShoppingCart,
@@ -22,7 +22,8 @@ import {
   faStar as faStarSolid,
   faHeart as faHeartSolid,
   faStarHalfAlt
-} from '@fortawesome/free-solid-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
+import withAuthentication from './session/withAuthentication';
 
 // Create library of icons to use on links
 library.add(
@@ -39,11 +40,11 @@ library.add(
   faHeartRegular,
   faHeartSolid,
   faStarHalfAlt
-)
+);
 
 class App extends Component {
   render() {
-    const { match } = this.props
+    const { match } = this.props;
     return (
       <>
         <Header />
@@ -54,8 +55,8 @@ class App extends Component {
           </Switch>
         </Suspense>
       </>
-    )
+    );
   }
 }
 
-export default withRouter(App)
+export default withAuthentication(App);

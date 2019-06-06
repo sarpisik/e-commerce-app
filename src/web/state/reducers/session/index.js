@@ -1,13 +1,16 @@
 import * as ACTIONS from '../../../constants/session';
 
 const INITIAL_STATE = {
-  authUser: null
+  // Get user credentials from local storage if exist.
+  authUser: JSON.parse(localStorage.getItem('authUser'))
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ACTIONS.SIGN_IN_SUCCESS:
-      return signIn(state, action.authUser);
+      return setLocalUser(state, action.authUser);
+    case ACTIONS.UPDATE_CREDENTIALS:
+      return setLocalUser(state, action.authUser);
     case ACTIONS.ADD_TO_CART:
       return addToCart(state, action);
     case ACTIONS.REMOVE_FROM_CART:
@@ -21,7 +24,10 @@ export default (state = INITIAL_STATE, action) => {
   }
 };
 
-function signIn(state, authUser) {
+function setLocalUser(state, authUser) {
+  // Set user credentials to local storage.
+  localStorage.setItem('authUser', JSON.stringify(authUser));
+  // Set store
   return Object.assign({}, state, { authUser });
 }
 function addToCart(state, { _id, count, color }) {

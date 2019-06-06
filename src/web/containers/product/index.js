@@ -1,20 +1,18 @@
-import { connect } from 'react-redux'
-import * as ACTIONS from '../../constants/session'
-import { Product } from '../../components'
+import { connect } from 'react-redux';
+import * as ACTIONS from '../../constants/session';
+import { Product } from '../../components';
 
 export const mapStateToProps = (
-  { sessionState, productsState },
+  { productsState },
   { categoryName, productId }
 ) => {
-  const authUser = sessionState.authUser
-  const category = productsState[categoryName]
-  const product = category.find(item => item._id === productId)
+  const category = productsState[categoryName];
+  const product = category.find(item => item._id === productId);
 
   return {
-    authUser,
     product
-  }
-}
+  };
+};
 
 export const mapDispatchToProps = dispatch => ({
   addToCart: (_id, count, color) =>
@@ -39,9 +37,9 @@ export const mapDispatchToProps = dispatch => ({
       type: ACTIONS.REMOVE_FAVORITE,
       _id
     })
-})
+});
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Product)
+)(Product);

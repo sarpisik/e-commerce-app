@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import withForm from '../HOCs/withForm';
 import { Form, Button } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
+import withAuthUser from '../../session/withAuthUser';
 
 const INITIAL_STATE = {
   email: '',
@@ -11,52 +12,52 @@ const INITIAL_STATE = {
   isLoading: false
 };
 
-// demo user
-const authUser = {
-  cart: {
-    '5ccd8c0b4851917ebb2bf3d2': {
-      color: 'grey',
-      count: 2
-    }
-  },
-  favorites: [
-    {
-      _id: '5ccd8c0b14a5a0fa9c7c9806'
-    },
-    {
-      _id: '5ccd8c0b341b7e4da62404ee'
-    }
-  ]
-};
-
-const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
+const LoginForm = ({
+  onChange,
+  onUpdate,
+  onReset,
+  apiCall,
+  handleLogin,
+  ...props
+}) => {
+  // withForm state
   const { email, password, keepLoggedIn, isLoading } = props;
   const onSubmit = e => {
     e.preventDefault();
+    // Show loading feedback.
     onUpdate({
       isLoading: true
     });
+
     const formValues = {
       email,
       password,
       keepLoggedIn
     };
-    simulateNetworkRequest(formValues).then(
-      ({ success, message, ...authUser }) => {
+
+    apiCall(process.env.API_LOGIN, formValues)
+      .then(({ success, message, ...authUser }) => {
+        // Show off loading feedback.
         onUpdate({
           isLoading: false
         });
+        // If the user logged in successfully...
         if (success) {
+          // Set user credentials to redux store
           handleLogin(authUser);
+          // Reset the form.
           onReset();
+          // If the user navigated to here from somewhere, send back.
+          // Else, replace to cart page.
           props.location.state
             ? props.history.goBack()
             : props.history.replace(ROUTES.CART);
         } else {
+          // Show why login failed.
           alert(message);
         }
-      }
-    );
+      })
+      .catch(err => console.error(err));
   };
 
   return (
@@ -92,7 +93,7 @@ const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
         />
       </Form.Group>
       <p>
-        Don't have account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+        Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
       </p>
       <Button variant="primary" type="submit" disabled={isLoading}>
         {isLoading ? 'Sending... Please do not close the page.' : 'Send'}
@@ -101,14 +102,4 @@ const LoginForm = ({ onChange, onUpdate, onReset, handleLogin, ...props }) => {
   );
 };
 
-export default withRouter(withForm(INITIAL_STATE)(LoginForm));
-
-function simulateNetworkRequest(formValues) {
-  return fetch(process.env.API_LOGIN, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(formValues)
-  }).then(response => response.json());
-}
+export default withAuthUser(withForm(INITIAL_STATE)(LoginForm));

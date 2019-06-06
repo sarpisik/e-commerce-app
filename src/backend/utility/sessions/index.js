@@ -28,7 +28,7 @@ const checkSession = (session, email) => {
           reject(rejectHandler(respond, 'Invalid Token'));
         }
       })
-      .catch(() => reject(rejectHandler(respond, 'Invalid Token')));
+      .catch(err => reject(rejectHandler(respond, err)));
   });
 };
 
