@@ -1,7 +1,6 @@
 import React from 'react'
 import { Media } from 'react-bootstrap'
 import Image from '../../Image'
-import Icon from '../../Icon'
 import { ReviewStarsForProductPage } from '../../ReviewStars'
 
 const ListItemImg = ({ src, alt }) => (
