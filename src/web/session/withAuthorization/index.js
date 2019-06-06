@@ -18,14 +18,14 @@ const withAuthorization = condition => route => Component => {
       // Else, push to route.
       if (condition && authUser) {
         const { email, session } = authUser;
-        // session api call
+        // Request user credentials + user cart items list
         apiCall(process.env.API_AUTH_USER_CART, {
           email,
           session
         })
           .then(({ success, message, ...authUser }) => {
             // If the request handled successful, update redux store.
-            // Else, show off loading screen.
+            // Else, show off loading screen & push to route.
             if (success) {
               this.props.updateAuthUserCredentials(authUser);
               this.setState({ authUser });

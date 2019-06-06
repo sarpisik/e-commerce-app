@@ -1,9 +1,8 @@
-import { connect } from 'react-redux'
-import { Home } from '../../pages'
+import { connect } from 'react-redux';
+import { Home } from '../../pages';
 
-export const mapStateToProps = ({ authUser, productsState }) => ({
-  authUser,
+export const mapStateToProps = ({ productsState }) => ({
   productsState
-})
+});
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps)(Home);
