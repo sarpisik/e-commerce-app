@@ -2,6 +2,7 @@ import Header from './Header';
 import PageLoader from './PageLoader';
 import PageTitle from './PageTitle';
 import PageBody from './PageBody';
+import Cart from './Cart';
 import SignOut from './SignOut';
 import Jumbotron from './Jumbotron';
 import Slide from './Slide';
@@ -27,6 +28,7 @@ export {
   PageLoader,
   PageTitle,
   PageBody,
+  Cart,
   SignOut,
   Jumbotron,
   Slide,

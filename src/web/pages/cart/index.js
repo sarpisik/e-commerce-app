@@ -2,14 +2,16 @@ import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { withAuthorization } from '../../session';
 import * as ROUTES from '../../constants/routes';
-import { PageTitle, PageBody } from '../../components';
+import { PageTitle, PageBody, Cart } from '../../components';
 
-const CartPage = () => {
+const CartPage = ({ authUser }) => {
   return (
     <Container>
       <Row className="justify-content-center bg-light">
         <PageTitle title="My Cart" />
-        <PageBody sm={4}>cart</PageBody>
+        <PageBody sm={9}>
+          <Cart products={authUser.cart} />
+        </PageBody>
       </Row>
     </Container>
   );
