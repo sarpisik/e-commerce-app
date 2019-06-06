@@ -1,19 +1,15 @@
 import React from 'react';
-import { SignUpForm } from '../../components';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
+import { SignUpForm, PageTitle, PageBody } from '../../components';
 
 const SignUpPage = () => {
   return (
     <Container>
       <Row className="justify-content-center bg-light">
-        <Col className="login-form-col pt-3" sm={9}>
-          <h3>SignUp</h3>
-          <hr />
-        </Col>
-
-        <Col className="login-form-col" sm={4}>
+        <PageTitle title="Sign Up" />
+        <PageBody sm={4}>
           <SignUpForm />
-        </Col>
+        </PageBody>
       </Row>
     </Container>
   );

@@ -23,6 +23,10 @@ const withAuthUser = Component => {
       dispatch({
         type: ACTIONS.SESSION_ID,
         sessionId
+      }),
+    signOut: () =>
+      dispatch({
+        type: ACTIONS.SIGN_OUT
       })
   });
 

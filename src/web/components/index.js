@@ -1,5 +1,8 @@
 import Header from './Header';
 import PageLoader from './PageLoader';
+import PageTitle from './PageTitle';
+import PageBody from './PageBody';
+import SignOut from './SignOut';
 import Jumbotron from './Jumbotron';
 import Slide from './Slide';
 import Categories from './Categories';
@@ -22,6 +25,9 @@ import SignUpForm from './SignUpForm';
 export {
   Header,
   PageLoader,
+  PageTitle,
+  PageBody,
+  SignOut,
   Jumbotron,
   Slide,
   Categories,

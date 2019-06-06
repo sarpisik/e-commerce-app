@@ -9,6 +9,8 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ACTIONS.SIGN_IN_SUCCESS:
       return setLocalUser(state, action.authUser);
+    case ACTIONS.SIGN_OUT:
+      return signOut(state, action.authUser);
     case ACTIONS.UPDATE_CREDENTIALS:
       return setLocalUser(state, action.authUser);
     case ACTIONS.ADD_TO_CART:
@@ -29,6 +31,11 @@ function setLocalUser(state, authUser) {
   localStorage.setItem('authUser', JSON.stringify(authUser));
   // Set store
   return Object.assign({}, state, { authUser });
+}
+function signOut(state) {
+  // Remove user credentials from local storage.
+  localStorage.removeItem('authUser');
+  return Object.assign({}, state, { authUser: null });
 }
 function addToCart(state, { _id, count, color }) {
   return {

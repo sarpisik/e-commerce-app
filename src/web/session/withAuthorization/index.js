@@ -8,14 +8,14 @@ const withAuthorization = condition => route => Component => {
       super(props);
 
       this.state = {
-        isLoading: true
+        authUser: null
       };
     }
 
     componentDidMount() {
       const { authUser, apiCall, handleNavigate } = this.props;
       // If user token exist, make api call.
-      // Else, use passed route to send.
+      // Else, push to route.
       if (condition && authUser) {
         const { email, session } = authUser;
         // session api call
@@ -28,7 +28,7 @@ const withAuthorization = condition => route => Component => {
             // Else, show off loading screen.
             if (success) {
               this.props.updateAuthUserCredentials(authUser);
-              this.setState({ isLoading: false });
+              this.setState({ authUser });
             } else {
               alert(message);
               handleNavigate(route);
@@ -43,9 +43,19 @@ const withAuthorization = condition => route => Component => {
       }
     }
 
+    componentDidUpdate() {
+      const { authUser, handleNavigate } = this.props;
+      // If user signed out, push to route.
+      // Else, update authUser
+      if (!authUser) {
+        handleNavigate(route);
+      } else {
+        authUser !== this.state.authUser && this.setState({ authUser });
+      }
+    }
+
     render() {
-      console.log(Component);
-      return this.state.isLoading ? <Spinner /> : <Component {...this.props} />;
+      return this.state.authUser ? <Component {...this.props} /> : <Spinner />;
     }
   }
 

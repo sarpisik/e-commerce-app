@@ -13,7 +13,7 @@ module.exports = function(request) {
     // If email is not empty, check db.
     // Else, send error.
     if (email) {
-      db.ReadDB('users', { email }, { cart: 1 })
+      db.ReadDB('users', { email }, {})
         .then(userResult => {
           // If the user is exist in db, respond the user details.
           // Else, send error.
