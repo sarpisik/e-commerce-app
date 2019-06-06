@@ -35,7 +35,8 @@ module.exports = function(request) {
                 lastLogin: '',
                 tokens: [],
                 lastTry: '',
-                favorites: []
+                favorites: [],
+                cart: []
               }
             ])
               .then(resp => {

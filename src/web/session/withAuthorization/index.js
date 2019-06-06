@@ -1,9 +1,8 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import withAuthUser from '../withAuthUser';
-import * as ROUTES from '../../constants';
+import { Spinner } from '../../components';
 
-const withAuthorization = Component => {
+const withAuthorization = condition => route => Component => {
   class WithAuthorization extends React.Component {
     constructor(props) {
       super(props);
@@ -13,22 +12,43 @@ const withAuthorization = Component => {
       };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
+      const { authUser, apiCall, handleNavigate } = this.props;
       // If user token exist, make api call.
-      // Else, send to login page.
-      if (this.props.authUser) {
+      // Else, use passed route to send.
+      if (condition && authUser) {
+        const { email, session } = authUser;
         // session api call
-        this.setState({ isLoading: false });
+        apiCall(process.env.API_AUTH_USER_CART, {
+          email,
+          session
+        })
+          .then(({ success, message, ...authUser }) => {
+            // If the request handled successful, update redux store.
+            // Else, show off loading screen.
+            if (success) {
+              this.props.updateAuthUserCredentials(authUser);
+              this.setState({ isLoading: false });
+            } else {
+              alert(message);
+              handleNavigate(route);
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            handleNavigate(route);
+          });
       } else {
-        this.props.history.push(ROUTES.LOGIN);
+        handleNavigate(route);
       }
     }
 
     render() {
-      return this.state.isLoading ? <Loading /> : <Component {...this.props} />;
+      console.log(Component);
+      return this.state.isLoading ? <Spinner /> : <Component {...this.props} />;
     }
   }
 
-  return withAuthUser(withRouter(WithAuthorization));
+  return withAuthUser(WithAuthorization);
 };
 export default withAuthorization;

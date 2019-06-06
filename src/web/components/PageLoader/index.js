@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import * as ROUTES from '../../constants/routes';
 import { extractStringQuery } from '../Helpers';
+import CartPage from '../../pages/cart';
 
 const Pages = {
   [ROUTES.CATEGORIES]: lazy(() =>
@@ -19,7 +20,8 @@ const Pages = {
   ),
   [ROUTES.SIGN_UP]: lazy(() =>
     import(/* webpackChunkName: "SignUpPage" */ '../../pages/signUp')
-  )
+  ),
+  [ROUTES.CART]: CartPage
 };
 
 const PageLoader = props => {

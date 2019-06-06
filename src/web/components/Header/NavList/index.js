@@ -16,12 +16,12 @@ const NavList = () => {
         className="order-sm-2 flex-lg-grow-0"
         id="responsive-navbar-nav">
         <Nav className="ml-auto">
-          <LinkContainer to={ROUTES.HOME}>
-            <Nav.Link href="#home">
+          <LinkContainer to={ROUTES.CART}>
+            <Nav.Link>
               <Icon icon="shopping-cart" />
             </Nav.Link>
           </LinkContainer>
-          <LinkContainer to={ROUTES.LOGIN}>
+          <LinkContainer to={ROUTES.ACCOUNT}>
             <Nav.Link>
               <Icon icon="user" />
             </Nav.Link>
