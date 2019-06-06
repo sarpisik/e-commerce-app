@@ -1,21 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
 
 const mapStateToProps = ({ sessionState }) => {
   const authUser = sessionState.authUser;
   return { authUser };
 };
 
-const withAuthentication = props => Component => {
-  const { authUser, history } = props;
-  // If the user logged in, render the navigated page.
-  // Else, navigate to login page.
-  if (authUser) {
-    return <Component {...props} />;
-  }
-  return history.push(ROUTES.LOGIN);
-};
+const withAuthentication = Component => {
+  class WithAuthentication extends React.Component {
+    constructor(props) {
+      super(props);
 
-export default connect(mapStateToProps)(withRouter(withAuthentication));
+      this.state = {
+        authUser: props.authUser || JSON.parse(localStorage.getItem('authUser'))
+      };
+    }
+
+    componentDidUpdate({ authUser }) {
+      authUser !== this.state.authUser && this.setState({ authUser });
+    }
+
+    render() {
+      return <Component authUser={this.state.authUser} {...this.props} />;
+    }
+  }
+
+  return connect(mapStateToProps)(withRouter(WithAuthentication));
+};
+export default withAuthentication;

@@ -6,7 +6,7 @@ import { history } from './components/Helpers';
 import serviceWorker from './serviceWorker';
 
 /*
-TODO: set login form backend compatibility.
+TODO: Create HOC to handle api call on valid authuser.
 TODO: set interact with localStorage to keep session ID.
 TODO: redux thunk on app initializing.
 TODO: create cart page with withAuthentication.
