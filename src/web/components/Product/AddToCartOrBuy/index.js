@@ -1,8 +1,8 @@
-import React from 'react'
-import { ButtonGroup, Button } from 'react-bootstrap'
-import ProductInfo from '../ProductInfo'
+import React from 'react';
+import { ButtonGroup, Button } from 'react-bootstrap';
+import ProductInfo from '../ProductInfo';
 
-const AddToCartOrBuy = ({ handleSubmit, disabled }) => (
+const AddToCartOrBuy = ({ handleSubmit, disabled, isLoading }) => (
   <ProductInfo
     className="m-0"
     description={
@@ -12,18 +12,18 @@ const AddToCartOrBuy = ({ handleSubmit, disabled }) => (
           onClick={handleSubmit}
           disabled={disabled}
           variant="outline-secondary">
-          ADD TO CART
+          {isLoading ? 'Please wait...' : 'ADD TO CART'}
         </Button>
         <Button
           name="buy"
           onClick={handleSubmit}
           disabled={disabled}
           variant="outline-secondary">
-          BUY NOW
+          {isLoading ? 'Please wait...' : 'BUY NOW'}
         </Button>
       </ButtonGroup>
     }
   />
-)
+);
 
-export default AddToCartOrBuy
+export default AddToCartOrBuy;

@@ -15,12 +15,10 @@ export const mapStateToProps = (
 };
 
 export const mapDispatchToProps = dispatch => ({
-  addToCart: (_id, count, color) =>
+  addToCart: product =>
     dispatch({
       type: ACTIONS.ADD_TO_CART,
-      _id,
-      count,
-      color
+      ...product
     }),
   removeFromCart: _id =>
     dispatch({

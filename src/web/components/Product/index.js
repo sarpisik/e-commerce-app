@@ -31,6 +31,7 @@ class Product extends PureComponent {
 
     this.state = {
       isLoading: true,
+      onRequest: false,
       pictures: setProductImage(this.productPictureSrc, this.productIndex),
       orderCount: 1,
       activeColorIndex: 0
@@ -59,13 +60,7 @@ class Product extends PureComponent {
   };
 
   handleSubmit = ({ target }) => {
-    // If user logged in, handle submit.
-    // Else, navigate to login page.
-    this.props.authUser
-      ? target.name === 'cart'
-        ? this.handleAddToCart()
-        : this.handleBuy()
-      : this.props.handleNavigate(ROUTES.LOGIN);
+    target.name === 'cart' ? this.handleAddToCart() : this.handleBuy();
   };
 
   handleAddToCart = () => {
@@ -75,9 +70,21 @@ class Product extends PureComponent {
       product: { colors }
     } = this.props;
     const { orderCount, activeColorIndex } = this.state;
-    const orderColor = colors[activeColorIndex];
 
-    addToCart(productId, orderCount, orderColor);
+    const color = colors[activeColorIndex];
+    const product = {
+      _id: productId,
+      count: orderCount,
+      color
+    };
+
+    this.handleApiCall(
+      process.env.API_AUTH_USER_CART,
+      { product },
+      // CallBack to update Redux
+      addToCart,
+      product
+    );
   };
 
   handleBuy = () => {
@@ -89,32 +96,45 @@ class Product extends PureComponent {
     this.props.history.push(route, state);
 
   toggleFavorite = (addToFavorites = false) => {
-    const {
-      authUser,
-      apiCall,
-      handleNavigate,
-      addFavorite,
-      removeFavorite,
+    const { authUser, addFavorite, removeFavorite, productId } = this.props;
+    const updateReduxOnSuccess = addToFavorites ? addFavorite : removeFavorite;
+    const favorites = addToFavorites
+      ? [...authUser.favorites, productId]
+      : authUser.favorites.filter(id => id !== productId);
+
+    this.handleApiCall(
+      process.env.API_AUTH_USER_UPDATE,
+      { favorites },
+      // CallBack to update Redux
+      updateReduxOnSuccess,
       productId
-    } = this.props;
+    );
+  };
+
+  handleApiCall = (url, data, callBack, productId) => {
+    const { authUser, apiCall, handleNavigate } = this.props;
+    // If user logged in, make api call.
+    // Else, navigate to login page.
     if (authUser) {
-      this.setState({ isLoading: true });
-      const favorites = addToFavorites
-        ? [...authUser.favorites, productId]
-        : authUser.favorites.filter(id => id !== productId);
+      this.setState({ onRequest: true });
       // api call
-      apiCall(process.env.API_AUTH_USER_UPDATE, {
+      apiCall(url, {
         email: authUser.email,
         session: authUser.session,
-        favorites
-      }).then(({ success, message }) => {
-        if (success) {
-          addToFavorites ? addFavorite(productId) : removeFavorite(productId);
-        } else {
-          alert(message);
-        }
-        this.setState({ isLoading: false });
-      });
+        ...data
+      })
+        .then(({ success, message }) => {
+          if (success) {
+            callBack(productId);
+          } else {
+            alert(message);
+          }
+          this.setState({ onRequest: false });
+        })
+        .catch(err => {
+          alert(err);
+          this.setState({ onRequest: false });
+        });
     } else {
       handleNavigate(ROUTES.LOGIN, true);
     }
@@ -122,7 +142,13 @@ class Product extends PureComponent {
 
   render() {
     const { authUser, productId, product } = this.props;
-    const { isLoading, pictures, orderCount, activeColorIndex } = this.state;
+    const {
+      isLoading,
+      onRequest,
+      pictures,
+      orderCount,
+      activeColorIndex
+    } = this.state;
 
     const isInFavorites =
       authUser && authUser.favorites.find(_id => _id === productId);
@@ -168,9 +194,10 @@ class Product extends PureComponent {
             <AddToCartOrBuy
               handleSubmit={this.handleSubmit}
               disabled={!product.isActive}
+              isLoading={onRequest}
             />
             <ToggleFavorite
-              isLoading={isLoading}
+              isLoading={onRequest}
               isInFavorites={isInFavorites}
               onClickToggle={this.toggleFavorite}
             />

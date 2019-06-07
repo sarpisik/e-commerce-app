@@ -42,7 +42,7 @@ function addToCart(state, { _id, count, color }) {
     ...state,
     authUser: {
       ...state.authUser,
-      cart: { ...state.authUser.cart, [_id]: { _id, count, color } }
+      cart: [...state.authUser.cart, { _id, count, color }]
     }
   };
 }
