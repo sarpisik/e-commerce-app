@@ -19,9 +19,7 @@ export default class Cart extends PureComponent {
     return (
       <Row>
         <Col sm={3}>price</Col>
-        <Col sm>
-          <ProductsList list={products} />
-        </Col>
+        <Col sm>{/* <ProductsList list={products} /> */}</Col>
       </Row>
     );
   }

@@ -16,12 +16,15 @@ const LoginForm = ({
   onChange,
   onUpdate,
   onReset,
-  apiCall,
+  handleSession,
   handleLogin,
   ...props
 }) => {
   // withForm state
   const { email, password, keepLoggedIn, isLoading } = props;
+
+  const isActive = email === '' || password === '';
+
   const onSubmit = e => {
     e.preventDefault();
     // Show loading feedback.
@@ -35,29 +38,12 @@ const LoginForm = ({
       keepLoggedIn
     };
 
-    apiCall(process.env.API_LOGIN, formValues)
-      .then(({ success, message, ...authUser }) => {
-        // Show off loading feedback.
-        onUpdate({
-          isLoading: false
-        });
-        // If the user logged in successfully...
-        if (success) {
-          // Set user credentials to redux store
-          handleLogin(authUser);
-          // Reset the form.
-          onReset();
-          // If the user navigated to here from somewhere, send back.
-          // Else, replace to cart page.
-          props.location.state
-            ? props.history.goBack()
-            : props.history.replace(ROUTES.CART);
-        } else {
-          // Show why login failed.
-          alert(message);
-        }
+    handleSession('login', formValues, () =>
+      // Turn off loading feedback on fail
+      onUpdate({
+        isLoading: false
       })
-      .catch(err => console.error(err));
+    );
   };
 
   return (
@@ -95,7 +81,7 @@ const LoginForm = ({
       <p>
         Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
       </p>
-      <Button variant="primary" type="submit" disabled={isLoading}>
+      <Button variant="primary" type="submit" disabled={isLoading || isActive}>
         {isLoading ? 'Sending... Please do not close the page.' : 'Send'}
       </Button>
     </Form>

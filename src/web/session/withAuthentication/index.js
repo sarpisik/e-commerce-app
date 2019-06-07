@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Spinner } from '../../components';
 import * as ACTIONS from '../../constants/session';
+import Backend from '../../backend';
 
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
@@ -21,51 +22,38 @@ const withAuthentication = Component => {
       // Else, show off loading screen.
       if (authUser) {
         const { email, session } = authUser;
-
-        this.makeApiCall(process.env.API_AUTH_USER_INFO, {
-          email,
-          session
-        })
-          .then(({ success, message, ...authUser }) => {
-            // If the request handled successful, update redux store.
-            // Else, show off loading screen.
-            if (success) {
-              this.props.updateAuthUserCredentials(authUser);
-            } else {
-              alert(message);
-            }
-            this.setState({ isLoading: false });
-          })
-          .catch(err => {
-            console.error(err);
-            this.setState({ isLoading: false });
-          });
+        Backend.getUserInfo(
+          process.env.API_AUTH_USER_INFO,
+          {
+            email,
+            session
+          },
+          this.handleUserCredentials
+        );
       } else {
-        this.setState({ isLoading: false });
+        this.removeLoadingIndicator();
       }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       // Update local storage on every credential changes
       prevProps.authUser !== this.props.authUser &&
         localStorage.setItem('authUser', JSON.stringify(this.props.authUser));
     }
 
-    makeApiCall = (url, data) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      }).then(response => response.json());
+    handleUserCredentials = (success, message, authUser) => {
+      // If the request handled successful, update redux store.
+      success && this.props.updateAuthUserCredentials(authUser);
+      this.removeLoadingIndicator();
     };
+
+    removeLoadingIndicator = () => this.setState({ isLoading: false });
 
     render() {
       return this.state.isLoading ? (
         <Spinner />
       ) : (
-        <Component apiCall={this.makeApiCall} {...this.props} />
+        <Component {...Backend} apiCall={Backend.makeApiCall} {...this.props} />
       );
     }
   }

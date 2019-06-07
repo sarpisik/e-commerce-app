@@ -134,8 +134,8 @@ module.exports = (env, argv) => {
             ga_property_id: 'UA-136431806-1'
           }
         }
-      ]),
-      new BundleAnalyzerPlugin()
+      ])
+      // new BundleAnalyzerPlugin()
     );
     return config;
   }

@@ -18,56 +18,39 @@ const SignUpForm = ({
   onChange,
   onUpdate,
   onReset,
-  apiCall,
+  handleSession,
   handleLogin,
   ...props
 }) => {
   // withForm state
   const { email, userName, password, password2, isLoading } = props;
+  const isActive =
+    email === '' ||
+    userName === '' ||
+    password === '' ||
+    password2 === '' ||
+    password !== password2;
+
   const onSubmit = e => {
     e.preventDefault();
+    // Show loading feedback.
+    onUpdate({
+      isLoading: true
+    });
 
-    // If the fields are validated, make API call.
-    // Else, null.
-    if ((email, userName, password, password2 && password === password2)) {
-      // Show loading feedback.
+    const formValues = {
+      email,
+      userName,
+      password,
+      password2
+    };
+
+    handleSession('signUp', formValues, () =>
+      // Turn off loading feedback on fail.
       onUpdate({
-        isLoading: true
-      });
-
-      const formValues = {
-        email,
-        userName,
-        password,
-        password2
-      };
-
-      apiCall(process.env.API_SIGN_UP, formValues)
-        .then(({ success, message, ...authUser }) => {
-          // Show off loading feedback.
-          onUpdate({
-            isLoading: false
-          });
-          // If the user signed up successfully...
-          if (success) {
-            // Set user credentials to redux store
-            handleLogin(authUser);
-            // Reset the form.
-            onReset();
-            // If the user navigated to here from somewhere, send back.
-            // Else, replace to cart page.
-            props.location.state
-              ? props.history.goBack()
-              : props.history.replace(ROUTES.CART);
-          } else {
-            // Show why sign up failed.
-            alert(message);
-          }
-        })
-        .catch(err => console.error(err));
-    } else {
-      return null;
-    }
+        isLoading: false
+      })
+    );
   };
 
   return (
@@ -108,7 +91,7 @@ const SignUpForm = ({
           value={password2}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" disabled={isLoading}>
+      <Button variant="primary" type="submit" disabled={isLoading || isActive}>
         {isLoading ? 'Sending... Please do not close the page.' : 'Send'}
       </Button>
     </Form>

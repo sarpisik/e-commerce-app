@@ -14,30 +14,4 @@ export const mapStateToProps = (
   };
 };
 
-export const mapDispatchToProps = dispatch => ({
-  addToCart: product =>
-    dispatch({
-      type: ACTIONS.ADD_TO_CART,
-      ...product
-    }),
-  removeFromCart: _id =>
-    dispatch({
-      type: ACTIONS.REMOVE_FROM_CART,
-      _id
-    }),
-  addFavorite: _id =>
-    dispatch({
-      type: ACTIONS.ADD_FAVORITE,
-      _id
-    }),
-  removeFavorite: _id =>
-    dispatch({
-      type: ACTIONS.REMOVE_FAVORITE,
-      _id
-    })
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Product);
+export default connect(mapStateToProps)(Product);
