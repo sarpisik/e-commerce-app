@@ -14,13 +14,13 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.UPDATE_CREDENTIALS:
       return setLocalUser(state, action.authUser);
     case ACTIONS.ADD_TO_CART:
-      return addToCart(state, action);
+      return addToCart(state, action.product);
     case ACTIONS.REMOVE_FROM_CART:
-      return removeFromCart(state, action);
+      return removeFromCart(state, action._id);
     case ACTIONS.ADD_FAVORITE:
-      return addFavorite(state, action);
+      return addFavorite(state, action.product);
     case ACTIONS.REMOVE_FAVORITE:
-      return removeFavorite(state, action);
+      return removeFavorite(state, action._id);
     default:
       return state;
   }
@@ -37,40 +37,39 @@ function signOut(state) {
   localStorage.removeItem('authUser');
   return Object.assign({}, state, { authUser: null });
 }
-function addToCart(state, { _id, count, color }) {
+function addToCart(state, product) {
   return {
     ...state,
     authUser: {
       ...state.authUser,
-      cart: [...state.authUser.cart, { _id, count, color }]
+      cart: [...state.authUser.cart, product]
     }
   };
 }
-function removeFromCart(state, { _id }) {
-  const { [_id]: product, ...restProducts } = state.authUser.cart;
+function removeFromCart(state, productId) {
   return {
     ...state,
     authUser: {
       ...state.authUser,
-      cart: restProducts
+      cart: state.authUser.cart.filter(({ _id }) => _id !== productId)
     }
   };
 }
-function addFavorite(state, { _id }) {
+function addFavorite(state, product) {
   return {
     ...state,
     authUser: {
       ...state.authUser,
-      favorites: [...state.authUser.favorites, _id]
+      favorites: [...state.authUser.favorites, product]
     }
   };
 }
-function removeFavorite(state, { _id }) {
+function removeFavorite(state, productId) {
   return {
     ...state,
     authUser: {
       ...state.authUser,
-      favorites: state.authUser.favorites.filter(id => id !== _id)
+      favorites: state.authUser.favorites.filter(({ _id }) => _id !== productId)
     }
   };
 }

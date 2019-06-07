@@ -63,28 +63,25 @@ class Product extends PureComponent {
     target.name === 'cart' ? this.handleAddToCart() : this.handleBuy();
   };
 
-  handleAddToCart = () => {
+  getProductToSend = () => {
     const {
-      addToCart,
       productId,
       product: { colors }
     } = this.props;
-    const { orderCount, activeColorIndex } = this.state;
-
+    const { activeColorIndex } = this.state;
     const color = colors[activeColorIndex];
-    const product = {
+
+    return {
       _id: productId,
-      count: orderCount,
       color
     };
+  };
 
-    this.handleApiCall(
-      process.env.API_AUTH_USER_CART,
-      { product },
-      // CallBack to update Redux
-      addToCart,
-      product
-    );
+  handleAddToCart = () => {
+    let product = this.getProductToSend();
+    product.count = this.state.orderCount;
+
+    this.handleApiCall('cart', { action: 'add', product });
   };
 
   handleBuy = () => {
@@ -92,53 +89,34 @@ class Product extends PureComponent {
     this.props.handleNavigate(ROUTES.CART);
   };
 
-  handleNavigate = (route, state = false) =>
-    this.props.history.push(route, state);
+  toggleFavorite = (action = 'remove') => {
+    let product = this.getProductToSend();
 
-  toggleFavorite = (addToFavorites = false) => {
-    const { authUser, addFavorite, removeFavorite, productId } = this.props;
-    const updateReduxOnSuccess = addToFavorites ? addFavorite : removeFavorite;
-    const favorites = addToFavorites
-      ? [...authUser.favorites, productId]
-      : authUser.favorites.filter(id => id !== productId);
-
-    this.handleApiCall(
-      process.env.API_AUTH_USER_UPDATE,
-      { favorites },
-      // CallBack to update Redux
-      updateReduxOnSuccess,
-      productId
-    );
+    this.handleApiCall('favorite', { action, product });
   };
 
-  handleApiCall = (url, data, callBack, productId) => {
-    const { authUser, apiCall, handleNavigate } = this.props;
+  handleApiCall = (actionType, data, callBack, productId) => {
+    const { authUser, handleUserProduct, handleNavigate } = this.props;
     // If user logged in, make api call.
     // Else, navigate to login page.
     if (authUser) {
-      this.setState({ onRequest: true });
+      this.toggleClickFeedBack(true);
       // api call
-      apiCall(url, {
-        email: authUser.email,
-        session: authUser.session,
-        ...data
-      })
-        .then(({ success, message }) => {
-          if (success) {
-            callBack(productId);
-          } else {
-            alert(message);
-          }
-          this.setState({ onRequest: false });
-        })
-        .catch(err => {
-          alert(err);
-          this.setState({ onRequest: false });
-        });
+      handleUserProduct(
+        actionType,
+        {
+          email: authUser.email,
+          session: authUser.session,
+          ...data
+        },
+        () => this.toggleClickFeedBack(false)
+      );
     } else {
       handleNavigate(ROUTES.LOGIN, true);
     }
   };
+
+  toggleClickFeedBack = onRequest => this.setState({ onRequest });
 
   render() {
     const { authUser, productId, product } = this.props;
@@ -151,7 +129,7 @@ class Product extends PureComponent {
     } = this.state;
 
     const isInFavorites =
-      authUser && authUser.favorites.find(_id => _id === productId);
+      authUser && authUser.favorites.find(({ _id }) => _id === productId);
 
     return (
       <>
@@ -293,7 +271,7 @@ function ToggleFavorite({ isLoading, isInFavorites, onClickToggle }) {
   if (isLoading) return <p>Please wait...</p>;
   if (isInFavorites)
     return <RemoveFromFavorites handleClick={() => onClickToggle()} />;
-  return <AddToFavorites handleClick={() => onClickToggle(true)} />;
+  return <AddToFavorites handleClick={() => onClickToggle('add')} />;
 }
 function AddToFavorites({ handleClick }) {
   return (

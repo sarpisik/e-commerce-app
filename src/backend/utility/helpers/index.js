@@ -1,6 +1,7 @@
 module.exports = {
   rejectHandler,
-  userCredentialsToSend
+  userCredentialsToSend,
+  setArrayEvent
 };
 
 function rejectHandler(respond, message) {
@@ -21,4 +22,20 @@ function userCredentialsToSend(respond, userResult) {
     respond[credential] = userResult[credential];
   });
   return respond;
+}
+
+function setArrayEvent(action, array, product) {
+  return action === 'remove'
+    ? {
+        $pull: {
+          [array]: {
+            _id: product._id
+          }
+        }
+      }
+    : {
+        $push: {
+          [array]: product
+        }
+      };
 }

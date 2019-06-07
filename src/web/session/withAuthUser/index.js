@@ -11,12 +11,16 @@ const withAuthUser = Component => {
 
       this.urls = {
         login: process.env.API_LOGIN,
-        signUp: process.env.API_SIGN_UP
+        signUp: process.env.API_SIGN_UP,
+        cart: process.env.API_AUTH_USER_CART,
+        favorite: process.env.API_AUTH_USER_FAVORITES
       };
     }
 
+    getUrl = type => this.urls[type];
+
     handleSession = (sessionType, formValues, formCallBack) => {
-      const url = this.urls[sessionType];
+      const url = this.getUrl(sessionType);
       this.props.getSessionInfo(url, formValues, (...respond) =>
         this.onSessionRespond(...respond, formCallBack)
       );
@@ -38,6 +42,34 @@ const withAuthUser = Component => {
       }
     };
 
+    handleUserProduct = (actionType, data, callBack) => {
+      const url = this.getUrl(actionType);
+      this.props.apiHandler(url, data, (...respond) =>
+        this.onProductRespond(actionType, data, callBack, ...respond)
+      );
+    };
+
+    onProductRespond = (actionType, data, callBack, success, message) => {
+      if (success) {
+        actionType === 'cart'
+          ? this.handleCart(data)
+          : this.handleFavorite(data);
+      } else {
+        console.error(message);
+      }
+      callBack();
+    };
+
+    handleCart = ({ action, product }) =>
+      action === 'add'
+        ? this.props.addToCart(product)
+        : this.props.removeFromCart(product._id);
+
+    handleFavorite = ({ action, product }) =>
+      action === 'add'
+        ? this.props.addFavorite(product)
+        : this.props.removeFavorite(product._id);
+
     handleNavigate = (route, state = false) =>
       this.props.history.push(route, state);
 
@@ -46,6 +78,7 @@ const withAuthUser = Component => {
         <Component
           {...this.props}
           handleSession={this.handleSession}
+          handleUserProduct={this.handleUserProduct}
           handleNavigate={this.handleNavigate}
         />
       );
@@ -72,17 +105,17 @@ const withAuthUser = Component => {
     addToCart: product =>
       dispatch({
         type: ACTIONS.ADD_TO_CART,
-        ...product
+        product
       }),
     removeFromCart: _id =>
       dispatch({
         type: ACTIONS.REMOVE_FROM_CART,
         _id
       }),
-    addFavorite: _id =>
+    addFavorite: product =>
       dispatch({
         type: ACTIONS.ADD_FAVORITE,
-        _id
+        product
       }),
     removeFavorite: _id =>
       dispatch({

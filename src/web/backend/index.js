@@ -17,6 +17,14 @@ class Backend {
       .catch(err => console.error(err));
   };
 
+  apiHandler = (url, data, callBack) => {
+    this.makeApiCall(url, data)
+      .then(({ success, message, ...authUser }) =>
+        callBack(success, message, authUser)
+      )
+      .catch(err => console.error(err));
+  };
+
   makeApiCall = (url, data) => {
     return fetch(url, {
       method: 'POST',
