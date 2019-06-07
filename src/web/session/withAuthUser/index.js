@@ -6,22 +6,8 @@ import * as ROUTES from '../../constants/routes';
 
 const withAuthUser = Component => {
   class WithAuthUserContext extends PureComponent {
-    constructor(props) {
-      super(props);
-
-      this.urls = {
-        login: process.env.API_LOGIN,
-        signUp: process.env.API_SIGN_UP,
-        cart: process.env.API_AUTH_USER_CART,
-        favorite: process.env.API_AUTH_USER_FAVORITES
-      };
-    }
-
-    getUrl = type => this.urls[type];
-
     handleSession = (sessionType, formValues, formCallBack) => {
-      const url = this.getUrl(sessionType);
-      this.props.getSessionInfo(url, formValues, (...respond) =>
+      this.props.apiHandler(sessionType, formValues, (...respond) =>
         this.onSessionRespond(...respond, formCallBack)
       );
     };
@@ -43,8 +29,7 @@ const withAuthUser = Component => {
     };
 
     handleUserProduct = (actionType, data, callBack) => {
-      const url = this.getUrl(actionType);
-      this.props.apiHandler(url, data, (...respond) =>
+      this.props.apiHandler(actionType, data, (...respond) =>
         this.onProductRespond(actionType, data, callBack, ...respond)
       );
     };

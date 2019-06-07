@@ -22,8 +22,8 @@ const withAuthentication = Component => {
       // Else, show off loading screen.
       if (authUser) {
         const { email, session } = authUser;
-        Backend.getUserInfo(
-          process.env.API_AUTH_USER_INFO,
+        Backend.apiHandler(
+          'session',
           {
             email,
             session
@@ -53,7 +53,7 @@ const withAuthentication = Component => {
       return this.state.isLoading ? (
         <Spinner />
       ) : (
-        <Component {...Backend} apiCall={Backend.makeApiCall} {...this.props} />
+        <Component {...Backend} {...this.props} />
       );
     }
   }

@@ -13,14 +13,14 @@ const withAuthorization = condition => route => Component => {
     }
 
     componentDidMount() {
-      const { authUser, getUserInfo, handleNavigate } = this.props;
+      const { authUser, apiHandler, handleNavigate } = this.props;
       // If user token exist, make api call.
       // Else, push to route.
       if (condition && authUser) {
         const { email, session } = authUser;
         // Request user credentials + user cart items list
-        getUserInfo(
-          process.env.API_AUTH_USER_INFO,
+        apiHandler(
+          'session',
           {
             email,
             session

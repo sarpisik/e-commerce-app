@@ -1,23 +1,17 @@
 class Backend {
-  constructor() {}
+  constructor() {
+    this.urls = {
+      session: process.env.API_AUTH_USER_INFO,
+      login: process.env.API_LOGIN,
+      signUp: process.env.API_SIGN_UP,
+      cart: process.env.API_AUTH_USER_CART,
+      favorite: process.env.API_AUTH_USER_FAVORITES
+    };
+  }
+  getUrl = type => this.urls[type];
 
-  getUserInfo = (url, session, callBack) => {
-    this.makeApiCall(url, session)
-      .then(({ success, message, ...authUser }) =>
-        callBack(success, message, authUser)
-      )
-      .catch(err => console.error(err));
-  };
-
-  getSessionInfo = (url, formValues, callBack) => {
-    this.makeApiCall(url, formValues)
-      .then(({ success, message, ...authUser }) =>
-        callBack(success, message, authUser)
-      )
-      .catch(err => console.error(err));
-  };
-
-  apiHandler = (url, data, callBack) => {
+  apiHandler = (request, data, callBack) => {
+    const url = this.getUrl(request);
     this.makeApiCall(url, data)
       .then(({ success, message, ...authUser }) =>
         callBack(success, message, authUser)
