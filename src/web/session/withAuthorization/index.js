@@ -13,31 +13,20 @@ const withAuthorization = condition => route => Component => {
     }
 
     componentDidMount() {
-      const { authUser, apiCall, handleNavigate } = this.props;
+      const { authUser, getUserInfo, handleNavigate } = this.props;
       // If user token exist, make api call.
       // Else, push to route.
       if (condition && authUser) {
         const { email, session } = authUser;
         // Request user credentials + user cart items list
-        apiCall(process.env.API_AUTH_USER_INFO, {
-          email,
-          session
-        })
-          .then(({ success, message, ...authUser }) => {
-            // If the request handled successful, update redux store.
-            // Else, show off loading screen & push to route.
-            if (success) {
-              this.props.updateAuthUserCredentials(authUser);
-              this.setState({ authUser });
-            } else {
-              alert(message);
-              handleNavigate(route);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            handleNavigate(route);
-          });
+        getUserInfo(
+          process.env.API_AUTH_USER_INFO,
+          {
+            email,
+            session
+          },
+          this.onRespondCredentials
+        );
       } else {
         handleNavigate(route);
       }
@@ -53,6 +42,18 @@ const withAuthorization = condition => route => Component => {
         authUser !== this.state.authUser && this.setState({ authUser });
       }
     }
+
+    onRespondCredentials = (success, message, authUser) => {
+      // If the request handled successful, update redux store.
+      // Else, show off loading screen & push to route.
+      if (success) {
+        this.props.updateAuthUserCredentials(authUser);
+        this.setState({ authUser });
+      } else {
+        console.error(message);
+        handleNavigate(route);
+      }
+    };
 
     render() {
       return this.state.authUser ? <Component {...this.props} /> : <Spinner />;
