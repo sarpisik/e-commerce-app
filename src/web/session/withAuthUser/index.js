@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import withAuthentication from '../withAuthentication';
+import withProducts from '../withProducts';
 import * as ACTIONS from '../../constants/session';
 import * as ROUTES from '../../constants/routes';
 
@@ -112,7 +112,7 @@ const withAuthUser = Component => {
   return connect(
     null,
     mapDispatchToProps
-  )(withAuthentication(WithAuthUserContext));
+  )(withProducts(WithAuthUserContext));
 };
 
 export default withAuthUser;
