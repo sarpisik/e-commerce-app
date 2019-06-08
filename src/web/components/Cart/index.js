@@ -65,6 +65,7 @@ class Cart extends PureComponent {
 
   removeProducts = () => {
     const { authUser, handleUserProduct } = this.props;
+    const product = this.state.purchasingList.map(({ _id }) => _id);
     this.toggleClickFeedBack(true);
     handleUserProduct(
       'cart',
@@ -72,7 +73,7 @@ class Cart extends PureComponent {
         email: authUser.email,
         session: authUser.session,
         action: 'remove',
-        product: this.state.purchasingList
+        product
       },
       this.respondHandler
     );
@@ -86,8 +87,10 @@ class Cart extends PureComponent {
         onRequest: !state.onRequest
       }));
       this.setCartList();
+    } else {
+      alert('Access denied!');
+      this.toggleClickFeedBack(false);
     }
-    this.toggleClickFeedBack(false);
   };
 
   toggleClickFeedBack = onRequest => this.setState({ onRequest });

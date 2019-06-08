@@ -47,13 +47,12 @@ function addToCart(state, product) {
   };
 }
 function removeFromCart(state, productsRemove) {
-  const productsRemoveId = productsRemove.map(({ _id }) => _id);
   return {
     ...state,
     authUser: {
       ...state.authUser,
       cart: state.authUser.cart.filter(
-        ({ _id }) => !productsRemoveId.includes(_id)
+        ({ _id }) => !productsRemove.includes(_id)
       )
     }
   };

@@ -26,12 +26,11 @@ function userCredentialsToSend(respond, userResult) {
 
 function setArrayEvent(action, array, product) {
   if (product instanceof Array) {
-    const productsRemove = product.map(({ _id }) => _id);
     return {
       $pull: {
         [array]: {
           _id: {
-            $in: productsRemove
+            $in: product
           }
         }
       }
