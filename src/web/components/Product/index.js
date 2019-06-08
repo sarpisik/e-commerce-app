@@ -66,13 +66,14 @@ class Product extends PureComponent {
   getProductToSend = () => {
     const {
       productId,
-      product: { colors }
+      product: { category, colors }
     } = this.props;
     const { activeColorIndex } = this.state;
     const color = colors[activeColorIndex];
 
     return {
       _id: productId,
+      category,
       color
     };
   };
@@ -95,7 +96,7 @@ class Product extends PureComponent {
     this.handleApiCall('favorite', { action, product });
   };
 
-  handleApiCall = (actionType, data, callBack, productId) => {
+  handleApiCall = (actionType, data) => {
     const { authUser, handleUserProduct, handleNavigate } = this.props;
     // If user logged in, make api call.
     // Else, navigate to login page.

@@ -16,7 +16,7 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.ADD_TO_CART:
       return addToCart(state, action.product);
     case ACTIONS.REMOVE_FROM_CART:
-      return removeFromCart(state, action._id);
+      return removeFromCart(state, action.product);
     case ACTIONS.ADD_FAVORITE:
       return addFavorite(state, action.product);
     case ACTIONS.REMOVE_FAVORITE:
@@ -46,12 +46,15 @@ function addToCart(state, product) {
     }
   };
 }
-function removeFromCart(state, productId) {
+function removeFromCart(state, productsRemove) {
+  const productsRemoveId = productsRemove.map(({ _id }) => _id);
   return {
     ...state,
     authUser: {
       ...state.authUser,
-      cart: state.authUser.cart.filter(({ _id }) => _id !== productId)
+      cart: state.authUser.cart.filter(
+        ({ _id }) => !productsRemoveId.includes(_id)
+      )
     }
   };
 }

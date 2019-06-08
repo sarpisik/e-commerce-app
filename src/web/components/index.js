@@ -11,7 +11,7 @@ import Category from './Categories/Category';
 import { CardContainer, Card } from './Cards';
 import Spinner from './Spinner';
 import Product from './Product';
-import ProductsList from './Products';
+import withProductsList from './HOCs/withProductsList';
 import SideBar, { SideBarList } from './SideBar';
 import FilterProducts from './FilterProducts';
 import CollapseContainer from './CollapseContainer';
@@ -22,6 +22,9 @@ import {
 } from './ReviewStars';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
+import ListItem from './ListItem';
+import { CategoryProductsList, UserProductsList } from './Products';
+import FormContainer, { CheckBox } from './FormContainer';
 
 export {
   Header,
@@ -38,7 +41,7 @@ export {
   Card,
   Spinner,
   Product,
-  ProductsList,
+  withProductsList,
   SideBar,
   SideBarList,
   FilterProducts,
@@ -47,5 +50,10 @@ export {
   ReviewStarsForProductPage,
   ReviewStarsIcon,
   LoginForm,
-  SignUpForm
+  SignUpForm,
+  ListItem,
+  CategoryProductsList,
+  UserProductsList,
+  FormContainer,
+  CheckBox
 };

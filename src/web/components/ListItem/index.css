@@ -1,0 +1,18 @@
+.list-unstyled.responsive .img-container {
+  width: 100px;
+}
+.list-unstyled.responsive h5 {
+  font-size: 0.7rem;
+}
+.list-unstyled.responsive p {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+li.media:hover {
+  cursor: pointer;
+}
+@media (min-width: 576px) {
+  .list-unstyled.responsive h5 {
+    font-size: 1rem;
+  }
+}

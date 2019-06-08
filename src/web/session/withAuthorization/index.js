@@ -51,7 +51,7 @@ const withAuthorization = condition => route => Component => {
         this.setState({ authUser });
       } else {
         console.error(message);
-        handleNavigate(route);
+        this.props.handleNavigate(route);
       }
     };
 

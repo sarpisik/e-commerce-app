@@ -5,7 +5,8 @@ class Backend {
       login: process.env.API_LOGIN,
       signUp: process.env.API_SIGN_UP,
       cart: process.env.API_AUTH_USER_CART,
-      favorite: process.env.API_AUTH_USER_FAVORITES
+      favorite: process.env.API_AUTH_USER_FAVORITES,
+      product: process.env.API_PRODUCT
     };
   }
   getUrl = type => this.urls[type];

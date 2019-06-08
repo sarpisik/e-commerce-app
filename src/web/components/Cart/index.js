@@ -1,26 +1,121 @@
 import React, { PureComponent } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { ProductsList } from '..';
+import { UserProductsList } from '..';
+import withProducts from '../../session/withProducts';
+import Spinner from '../Spinner';
+import PurchaseBar from './PurchaseBar';
 
-// TODO: Merge this component to products HOC
+// TODO: Edit layout
 
-export default class Cart extends PureComponent {
+class Cart extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      products: props.products,
-      selectedProducts: []
+      onRequest: false,
+      cartList: [],
+      purchasingList: []
     };
   }
 
-  render() {
-    const { products, selectedProducts } = this.state;
-    return (
-      <Row>
-        <Col sm={3}>price</Col>
-        <Col sm>{/* <ProductsList list={products} /> */}</Col>
-      </Row>
+  componentDidMount() {
+    this.setCartList();
+  }
+
+  setCartList = () =>
+    this.props.products.forEach(({ category, _id, count }) => {
+      let foundProduct = this.props.getProductById(category, _id);
+
+      // If the product found in redux store, pass to state.
+      // Else, get product from the server and pass to state.
+      foundProduct
+        ? this.setState(state => ({
+            cartList: [...state.cartList, { ...foundProduct, count }]
+          }))
+        : fetchProductById({ category, _id }, product =>
+            this.setState(state => ({
+              cartList: [...state.cartList, { ...product, count }]
+            }))
+          );
+    });
+
+  // Toggle the selected product on purchasing list.
+  onChange = ({ target }) =>
+    this.setState(state => {
+      let purchasingList;
+      const selectedProduct = state.cartList.find(
+        ({ _id }) => _id === target.name
+      );
+      // If the selected product is already in the purchase list, remove from purchase list.
+      // Else, add to purchasing list
+      if (state.purchasingList.includes(selectedProduct)) {
+        purchasingList = state.purchasingList.filter(
+          ({ _id }) => _id !== selectedProduct._id
+        );
+      } else {
+        purchasingList = [...state.purchasingList, selectedProduct];
+      }
+      return { purchasingList };
+    });
+
+  getPurchasingPrice = purchasingList =>
+    purchasingList
+      .reduce((prev, { price, count }) => prev + parseFloat(price * count), 0)
+      .toFixed(2);
+
+  removeProducts = () => {
+    const { authUser, handleUserProduct } = this.props;
+    this.toggleClickFeedBack(true);
+    handleUserProduct(
+      'cart',
+      {
+        email: authUser.email,
+        session: authUser.session,
+        action: 'remove',
+        product: this.state.purchasingList
+      },
+      this.respondHandler
     );
+  };
+
+  respondHandler = success => {
+    if (success) {
+      this.setState(state => ({
+        purchasingList: [],
+        cartList: [],
+        onRequest: !state.onRequest
+      }));
+      this.setCartList();
+    }
+    this.toggleClickFeedBack(false);
+  };
+
+  toggleClickFeedBack = onRequest => this.setState({ onRequest });
+
+  render() {
+    const { cartList, purchasingList, onRequest } = this.state;
+
+    // Show loading until products from the redux and the server are ready.
+    if (this.props.products.length !== cartList.length) return <Spinner />;
+    // If user has products in the cart, display.
+    // Else, print below text.
+    if (cartList.length > 0)
+      return (
+        <Row className="shadow">
+          {purchasingList.length > 0 && (
+            <PurchaseBar
+              totalPrice={this.getPurchasingPrice(purchasingList)}
+              deleteSelecteds={this.removeProducts}
+              loading={onRequest}
+            />
+          )}
+          <Col sm>
+            <UserProductsList products={cartList} onChange={this.onChange} />
+          </Col>
+        </Row>
+      );
+    return <p>You have no product in your cart.</p>;
   }
 }
+
+export default withProducts(Cart);

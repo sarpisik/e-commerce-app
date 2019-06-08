@@ -1,8 +1,0 @@
-li.media:hover {
-  cursor: pointer;
-}
-@media (min-width: 576px) {
-  .img-container {
-    width: 200px;
-  }
-}

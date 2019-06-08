@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import withProducts from '../withProducts';
+import withAuthentication from '../withAuthentication';
 import * as ACTIONS from '../../constants/session';
 import * as ROUTES from '../../constants/routes';
 
@@ -42,13 +42,13 @@ const withAuthUser = Component => {
       } else {
         console.error(message);
       }
-      callBack();
+      callBack(success);
     };
 
     handleCart = ({ action, product }) =>
       action === 'add'
         ? this.props.addToCart(product)
-        : this.props.removeFromCart(product._id);
+        : this.props.removeFromCart(product);
 
     handleFavorite = ({ action, product }) =>
       action === 'add'
@@ -92,10 +92,10 @@ const withAuthUser = Component => {
         type: ACTIONS.ADD_TO_CART,
         product
       }),
-    removeFromCart: _id =>
+    removeFromCart: product =>
       dispatch({
         type: ACTIONS.REMOVE_FROM_CART,
-        _id
+        product
       }),
     addFavorite: product =>
       dispatch({
@@ -112,7 +112,7 @@ const withAuthUser = Component => {
   return connect(
     null,
     mapDispatchToProps
-  )(withProducts(WithAuthUserContext));
+  )(withAuthentication(WithAuthUserContext));
 };
 
 export default withAuthUser;

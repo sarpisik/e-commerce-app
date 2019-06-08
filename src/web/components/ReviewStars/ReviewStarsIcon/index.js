@@ -1,28 +1,29 @@
-import React from 'react'
-import Icon from '../../Icon'
+import React from 'react';
+import Icon from '../../Icon';
+import './index.css';
 
 const starTypes = {
   solid: ['fas', 'star'],
   half: 'star-half-alt',
   regular: ['far', 'star']
-}
+};
 
 const renderStars = (type, index) => {
-  const starIconType = starTypes[type]
-  return <Icon key={index} icon={starIconType} />
-}
+  const starIconType = starTypes[type];
+  return <Icon key={index} icon={starIconType} />;
+};
 
 const arrayOfStars = starTypesObj => {
-  let starsArr = []
+  let starsArr = [];
   Object.keys(starTypesObj).forEach(starType => {
     if (starTypesObj[starType]) {
       for (let index = 0; index < starTypesObj[starType]; index++) {
-        starsArr.push(starType)
+        starsArr.push(starType);
       }
     }
-  })
-  return starsArr
-}
+  });
+  return starsArr;
+};
 
 export const starTypesObj = (
   solidStarCount,
@@ -32,11 +33,11 @@ export const starTypesObj = (
   solid: solidStarCount,
   half: halfStarCount,
   regular: regularStarCount
-})
+});
 
 const ReviewStarsIcon = ({ starTypes }) => {
-  const starsArray = arrayOfStars(starTypes)
-  return <span>{starsArray.map(renderStars)}</span>
-}
+  const starsArray = arrayOfStars(starTypes);
+  return <span>{starsArray.map(renderStars)}</span>;
+};
 
-export default ReviewStarsIcon
+export default ReviewStarsIcon;
