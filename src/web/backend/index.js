@@ -7,7 +7,8 @@ class Backend {
       cart: process.env.API_AUTH_USER_CART,
       favorite: process.env.API_AUTH_USER_FAVORITES,
       products: process.env.API_PRODUCTs,
-      product: process.env.API_PRODUCT
+      product: process.env.API_PRODUCT,
+      search: process.env.API_PRODUCT_SEARCH
     };
   }
   getUrl = type => this.urls[type];

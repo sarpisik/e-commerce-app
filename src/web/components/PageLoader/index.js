@@ -23,13 +23,16 @@ const Pages = {
   ),
   [ROUTES.ACCOUNT]: lazy(() =>
     import(/* webpackChunkName: "AccountPage" */ '../../pages/account')
+  ),
+  [ROUTES.SEARCH]: lazy(() =>
+    import(/* webpackChunkName: "SearchPage" */ '../../pages/search')
   )
 };
 
 const PageLoader = props => {
   const Component = Pages[props.match.params.pageId];
   const searchQuery = extractStringQuery(props.location.search);
-  return <Component {...searchQuery} {...props} />;
+  return <Component search={searchQuery} {...searchQuery} {...props} />;
 };
 
 export default PageLoader;

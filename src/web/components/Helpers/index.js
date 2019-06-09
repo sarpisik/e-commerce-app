@@ -14,6 +14,7 @@ import { parseToKey, parseToValue } from './categoryNameParser';
 import navigateCategoriesList, { setRoute } from './navigateCategoriesList';
 import firstLetterUppercase from './firstLetterUppercase';
 import getColorsPalette from './getColorsPalette';
+import searchTextInObject, { getCategories } from './searchProductByName';
 
 export {
   editImageSource,
@@ -34,5 +35,7 @@ export {
   navigateCategoriesList,
   setRoute,
   firstLetterUppercase,
-  getColorsPalette
+  getColorsPalette,
+  searchTextInObject,
+  getCategories
 };

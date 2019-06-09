@@ -5,6 +5,9 @@ import * as ACTIONS from '../../constants/products';
 
 const withProducts = Component => {
   class WithProducts extends PureComponent {
+    fetchProductByName = (body, callBack) =>
+      this.props.apiHandler('search', body, callBack);
+
     fetchProductsByCategory = (body, callBack) =>
       this.props.apiHandler('products', body, callBack);
 
@@ -24,6 +27,7 @@ const withProducts = Component => {
           getProductById={this.getProductById}
           fetchProductById={this.fetchProductById}
           fetchProductsByCategory={this.fetchProductsByCategory}
+          fetchProductByName={this.fetchProductByName}
         />
       );
     }

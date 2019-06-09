@@ -5,7 +5,7 @@ import Spinner from '../../Spinner';
 
 const loaderStyle = { bottom: '0.5rem' };
 
-const CategoryProductsList = ({ loading, products, onNavigate }) => {
+const CategoryProductsList = ({ loading = false, products, onNavigate }) => {
   return (
     <ul className="list-unstyled responsive">
       {products.map((product, index) => (
