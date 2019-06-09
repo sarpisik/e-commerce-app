@@ -1,6 +1,5 @@
 # WEB
 dist/
-assets/
 *.log
 
 # node.js
