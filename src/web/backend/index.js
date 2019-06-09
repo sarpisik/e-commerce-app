@@ -6,14 +6,15 @@ class Backend {
       signUp: process.env.API_SIGN_UP,
       cart: process.env.API_AUTH_USER_CART,
       favorite: process.env.API_AUTH_USER_FAVORITES,
+      products: process.env.API_PRODUCTs,
       product: process.env.API_PRODUCT
     };
   }
   getUrl = type => this.urls[type];
 
-  apiHandler = (request, data, callBack) => {
+  apiHandler = (request, body, callBack) => {
     const url = this.getUrl(request);
-    this.makeApiCall(url, data)
+    this.makeApiCall(url, body)
       .then(({ success, message, ...authUser }) =>
         callBack(success, message, authUser)
       )

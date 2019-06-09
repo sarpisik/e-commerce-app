@@ -1,11 +1,11 @@
-require('dotenv').config()
+require('dotenv').config();
 const connectionString =
   process.env['CUSTOMCONNSTR_mongoConnection'] ||
-  process.env.MONGODB_CREDENTIALS
+  process.env.MONGODB_CREDENTIALS;
 
-const MongoClient = require('mongodb').MongoClient
-const dbName = process.env.DB_NAME
-const client = new MongoClient(connectionString, { useNewUrlParser: true })
+const MongoClient = require('mongodb').MongoClient;
+const dbName = process.env.DB_NAME;
+const client = new MongoClient(connectionString, { useNewUrlParser: true });
 
 // CONNECT-DISCONNECT OPERATIONS
 const OpenDB = () => {
@@ -13,32 +13,32 @@ const OpenDB = () => {
     if (!client.isConnected()) {
       client.connect(err => {
         if (err == null) {
-          resolve('DB Connected!')
+          resolve('DB Connected!');
         } else {
-          reject(err)
+          reject(err);
         }
-      })
+      });
     } else {
-      reject('Already Connected!')
+      reject('Already Connected!');
     }
-  })
-}
+  });
+};
 
 const CloseDB = () => {
   return new Promise((resolve, reject) => {
     if (client.isConnected()) {
       client.close(err => {
         if (err == null) {
-          resolve('Disconnected Success!')
+          resolve('Disconnected Success!');
         } else {
-          reject(err)
+          reject(err);
         }
-      })
+      });
     } else {
-      reject('Already Disconnected!')
+      reject('Already Disconnected!');
     }
-  })
-}
+  });
+};
 
 // CRUD OPERATIONS
 const CreateDB = (table, model) => {
@@ -49,27 +49,29 @@ const CreateDB = (table, model) => {
         .collection(table)
         .insertMany(model)
         .then(res => resolve(res))
-        .catch(err => reject(err))
+        .catch(err => reject(err));
     } else {
-      reject('Not Connected!')
+      reject('Not Connected!');
     }
-  })
-}
+  });
+};
 
-const ReadDB = (table, query, fields) => {
+const ReadDB = (table, query, fields, skip = 0, limit = 0) => {
   return new Promise((resolve, reject) => {
     if (client.isConnected()) {
       client
         .db(dbName)
         .collection(table)
         .find(query)
+        .skip(skip)
+        .limit(limit)
         .project(fields)
-        .toArray((err, res) => (err ? reject(err) : resolve(res)))
+        .toArray((err, res) => (err ? reject(err) : resolve(res)));
     } else {
-      reject('Not Connected!')
+      reject('Not Connected!');
     }
-  })
-}
+  });
+};
 
 const UpdateDB = (table, query, values) => {
   return new Promise((resolve, reject) => {
@@ -79,12 +81,12 @@ const UpdateDB = (table, query, values) => {
         .collection(table)
         .updateMany(query, values, (err, res) =>
           err ? reject(err) : resolve(res)
-        )
+        );
     } else {
-      reject('Not Connected!')
+      reject('Not Connected!');
     }
-  })
-}
+  });
+};
 
 const DeleteDB = (table, query) => {
   return new Promise((resolve, reject) => {
@@ -92,12 +94,12 @@ const DeleteDB = (table, query) => {
       client
         .db(dbName)
         .collection(table)
-        .deleteMany(query, (err, res) => (err ? reject(err) : resolve(res)))
+        .deleteMany(query, (err, res) => (err ? reject(err) : resolve(res)));
     } else {
-      reject('Not Connected!')
+      reject('Not Connected!');
     }
-  })
-}
+  });
+};
 
 module.exports = {
   client,
@@ -107,4 +109,4 @@ module.exports = {
   ReadDB,
   UpdateDB,
   DeleteDB
-}
+};

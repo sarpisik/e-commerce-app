@@ -7,9 +7,7 @@ const Pages = {
     import(/* webpackChunkName: "CategoriesPage" */ '../../pages/categories')
   ),
   [ROUTES.CATEGORY]: lazy(() =>
-    import(
-      /* webpackChunkName: "CategoryPage" */ '../../containers/categoryPage'
-    )
+    import(/* webpackChunkName: "CategoryPage" */ '../../pages/category')
   ),
   [ROUTES.PRODUCT]: lazy(() =>
     import(/* webpackChunkName: "ProductPage" */ '../../pages/product')

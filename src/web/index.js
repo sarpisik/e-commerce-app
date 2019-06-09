@@ -19,11 +19,14 @@ import App from './App';
 // UI
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import { ScrollToTop } from './components';
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <App />
+      <ScrollToTop>
+        <App />
+      </ScrollToTop>
     </Router>
   </Provider>,
   document.getElementById('root')

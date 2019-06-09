@@ -1,14 +1,62 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { Category, Product } from '../../containers';
+import { Category } from '../../containers';
+import { Product, Spinner } from '../../components';
+import withProducts from '../../session/withProducts';
 
-const ProductPage = ({ cat, prod }) => (
-  <Container>
-    <Product categoryName={cat} productId={prod} />
-    <Row className="bg-white">
-      <Category categoryName={cat} />
-    </Row>
-  </Container>
-);
+class ProductPage extends PureComponent {
+  constructor(props) {
+    super(props);
 
-export default ProductPage;
+    this.state = {
+      isLoading: true
+    };
+  }
+
+  componentDidMount() {
+    const { cat, prod, getProductById, fetchProductById } = this.props;
+    const product = getProductById(cat, prod);
+
+    // If product exist in redux, pass it to child.
+    // Else, fetch product.
+    if (product) {
+      this.setState({ isLoading: false });
+    } else {
+      fetchProductById(
+        {
+          category: cat,
+          _id: prod
+        },
+        (...response) => this.onFetchProductById(...response)
+      );
+    }
+  }
+
+  onFetchProductById = (success, message, { products }) => {
+    if (success) {
+      this.props.addProductsByCategory({
+        category: products[0].category,
+        products
+      });
+      this.setState({ isLoading: false });
+    } else {
+      alert(message);
+    }
+  };
+
+  render() {
+    const product = this.props.getProductById(this.props.cat, this.props.prod);
+    return this.state.isLoading ? (
+      <Spinner />
+    ) : (
+      <Container>
+        <Product product={product} {...this.props} />
+        <Row className="bg-white">
+          <Category categoryName={product.category} />
+        </Row>
+      </Container>
+    );
+  }
+}
+
+export default withProducts(ProductPage);

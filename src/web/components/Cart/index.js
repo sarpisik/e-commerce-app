@@ -5,8 +5,6 @@ import withProducts from '../../session/withProducts';
 import Spinner from '../Spinner';
 import PurchaseBar from './PurchaseBar';
 
-// TODO: Edit layout
-
 class Cart extends PureComponent {
   constructor(props) {
     super(props);
@@ -32,12 +30,20 @@ class Cart extends PureComponent {
         ? this.setState(state => ({
             cartList: [...state.cartList, { ...foundProduct, count }]
           }))
-        : fetchProductById({ category, _id }, product =>
-            this.setState(state => ({
-              cartList: [...state.cartList, { ...product, count }]
-            }))
+        : this.props.fetchProductById({ category, _id }, (...response) =>
+            this.onFetchProductById(count, ...response)
           );
     });
+
+  onFetchProductById = (count, success, message, { products }) => {
+    if (success) {
+      this.setState(state => ({
+        cartList: [...state.cartList, { ...products[0], count }]
+      }));
+    } else {
+      alert(message);
+    }
+  };
 
   // Toggle the selected product on purchasing list.
   onChange = ({ target }) =>

@@ -5,7 +5,7 @@ const { rejectHandler } = helpers;
 
 module.exports = function(request) {
   return new Promise((resolve, reject) => {
-    const { category, _id } = request.body;
+    const { category, skip, limit } = request.body;
     const respond = {
       success: false,
       message: ''
@@ -13,9 +13,8 @@ module.exports = function(request) {
 
     // If the fields are not empty, check db.
     // Else, send error.
-    console.log(category, _id);
-    if (category && _id) {
-      db.ReadDB(category, { _id }, {})
+    if (category) {
+      db.ReadDB(category, {}, {}, skip, limit)
         .then(productResult => {
           if (productResult.length > 0) {
             respond.success = true;

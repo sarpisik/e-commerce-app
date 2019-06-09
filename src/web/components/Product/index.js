@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import withAuthUser from '../../session/withAuthUser';
-import { withRouter } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import {
@@ -19,7 +17,7 @@ import AddToCartOrBuy from './AddToCartOrBuy';
 
 const maxHeightAndWidth = 400;
 
-class Product extends PureComponent {
+export default class Product extends PureComponent {
   constructor(props) {
     super(props);
     this.productPictureSrc = updateImageSizesOfProducts(
@@ -65,14 +63,13 @@ class Product extends PureComponent {
 
   getProductToSend = () => {
     const {
-      productId,
-      product: { category, colors }
+      product: { _id, category, colors }
     } = this.props;
     const { activeColorIndex } = this.state;
     const color = colors[activeColorIndex];
 
     return {
-      _id: productId,
+      _id,
       category,
       color
     };
@@ -120,7 +117,7 @@ class Product extends PureComponent {
   toggleClickFeedBack = onRequest => this.setState({ onRequest });
 
   render() {
-    const { authUser, productId, product } = this.props;
+    const { authUser, product } = this.props;
     const {
       isLoading,
       onRequest,
@@ -130,7 +127,7 @@ class Product extends PureComponent {
     } = this.state;
 
     const isInFavorites =
-      authUser && authUser.favorites.find(({ _id }) => _id === productId);
+      authUser && authUser.favorites.find(({ _id }) => _id === product._id);
 
     return (
       <>
@@ -187,7 +184,6 @@ class Product extends PureComponent {
     );
   }
 }
-export default withAuthUser(withRouter(Product));
 
 function setProductImage(src, index) {
   const pictures = [

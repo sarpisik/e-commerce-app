@@ -15,6 +15,8 @@ import withProductsList from './HOCs/withProductsList';
 import SideBar, { SideBarList } from './SideBar';
 import FilterProducts from './FilterProducts';
 import CollapseContainer from './CollapseContainer';
+import CategoriesListBar from './CategoriesListBar';
+import ProductsListByCategory from './ProductsListByCategory';
 import {
   ReviewStarsForFilterForm,
   ReviewStarsForProductPage,
@@ -25,6 +27,8 @@ import SignUpForm from './SignUpForm';
 import ListItem from './ListItem';
 import { CategoryProductsList, UserProductsList } from './Products';
 import FormContainer, { CheckBox } from './FormContainer';
+import withScroll from './HOCs/withScroll';
+import ScrollToTop from './ScrollToTop';
 
 export {
   Header,
@@ -46,6 +50,8 @@ export {
   SideBarList,
   FilterProducts,
   CollapseContainer,
+  CategoriesListBar,
+  ProductsListByCategory,
   ReviewStarsForFilterForm,
   ReviewStarsForProductPage,
   ReviewStarsIcon,
@@ -55,5 +61,7 @@ export {
   CategoryProductsList,
   UserProductsList,
   FormContainer,
-  CheckBox
+  CheckBox,
+  withScroll,
+  ScrollToTop
 };
