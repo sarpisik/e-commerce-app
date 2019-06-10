@@ -13,7 +13,6 @@ module.exports = function(request) {
 
     // If the fields are not empty, check db.
     // Else, send error.
-    console.log(category, _id);
     if (category && _id) {
       db.ReadDB(category, { _id }, {})
         .then(productResult => {
