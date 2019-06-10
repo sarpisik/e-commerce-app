@@ -21,9 +21,7 @@ const Header = () => {
           <SearchBar />
         </Navbar>
         <Row noGutters className="bg-dark align-items-center">
-          <Col sm={12} className="text-left">
-            <CountryBar />
-          </Col>
+          <CountryBar />
           <Col sm={12} className="text-left route-tabs">
             <RouteBar />
           </Col>
