@@ -9,10 +9,11 @@
     "test:unit:watch": "npm run test:unit -- --watch",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls",
     "dev": "webpack-dev-server --open --mode development --config webpack.config.js",
-    "start": "npm run build && node index",
+    "start": "node index",
     "build": "webpack --mode=production --config webpack.config.js",
     "server": "nodemon src/backend/index.js",
-    "demo": "concurrently \"npm run server\" \"npm run dev\""
+    "demo": "concurrently \"npm run server\" \"npm run dev\"",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
