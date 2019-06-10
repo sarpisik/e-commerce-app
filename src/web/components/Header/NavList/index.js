@@ -19,15 +19,18 @@ const NavList = ({ location }) => {
         <Nav className="ml-auto">
           <LinkContainer to={ROUTES.CART}>
             <Nav.Link active={location.pathname === `/${ROUTES.CART}`}>
-              <Icon icon="shopping-cart" />
+              <Icon className="link-icon" icon="shopping-cart">
+                My Cart
+              </Icon>
             </Nav.Link>
           </LinkContainer>
           <LinkContainer to={ROUTES.ACCOUNT}>
             <Nav.Link active={location.pathname === `/${ROUTES.ACCOUNT}`}>
-              <Icon icon="user" />
+              <Icon className="link-icon" icon="user">
+                Account
+              </Icon>
             </Nav.Link>
           </LinkContainer>
-          {/* <Nav.Link href="#pricing">Pricing</Nav.Link> */}
         </Nav>
       </Navbar.Collapse>
     </>

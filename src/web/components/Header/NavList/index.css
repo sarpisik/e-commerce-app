@@ -1,3 +1,6 @@
+.svg-inline--fa.link-icon {
+  width: 1.125em !important;
+}
 @media (min-width: 477px) {
   .navbar-toggler {
     order: 2;
