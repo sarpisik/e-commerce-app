@@ -1,12 +1,13 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withAuthUser } from '../../../session';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, Navbar } from 'react-bootstrap';
-import * as ROUTES from '../../../constants/routes';
-import './index.css';
 import IconLink from './IconLink';
 
-const NavList = ({ location }) => {
+import * as ROUTES from '../../../constants/routes';
+import './index.css';
+
+const NavList = ({ location, authUser }) => {
   return (
     <>
       <Navbar.Toggle
@@ -18,12 +19,20 @@ const NavList = ({ location }) => {
         id="responsive-navbar-nav">
         <Nav className="ml-auto">
           <LinkContainer to={ROUTES.CART}>
-            <Nav.Link active={location.pathname === `/${ROUTES.CART}`}>
-              <IconLink name="My Cart" icon="shopping-cart" />
+            <Nav.Link
+              className="position-relative"
+              active={location.pathname === `/${ROUTES.CART}`}>
+              <IconLink
+                name="My Cart"
+                icon="shopping-cart"
+                badge={authUser.cart.length}
+              />
             </Nav.Link>
           </LinkContainer>
           <LinkContainer to={ROUTES.ACCOUNT}>
-            <Nav.Link active={location.pathname === `/${ROUTES.ACCOUNT}`}>
+            <Nav.Link
+              className="position-relative"
+              active={location.pathname === `/${ROUTES.ACCOUNT}`}>
               <IconLink name="Account" icon="user" />
             </Nav.Link>
           </LinkContainer>
@@ -33,4 +42,4 @@ const NavList = ({ location }) => {
   );
 };
 
-export default withRouter(NavList);
+export default withAuthUser(NavList);
