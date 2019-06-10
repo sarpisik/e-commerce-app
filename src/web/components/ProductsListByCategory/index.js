@@ -16,13 +16,13 @@ class ProductsListByCategory extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.initialFilterSetup();
+    this.setFiltersSelections();
     this.state = {
       ...INITIAL_STATE
     };
   }
 
-  initialFilterSetup = () => {
+  setFiltersSelections = () => {
     // Amount of repeated companies
     this.companies = {};
     // Amounts of repeated review averages
@@ -187,12 +187,9 @@ class ProductsListByCategory extends PureComponent {
     ];
   };
 
-  // updateListOnState = () => {
-  //   this.setState({ productsList: this.filteredProductsList });
-  // };
-
   render() {
     const { filterTypes, sortType } = this.state;
+    this.setFiltersSelections();
     const list =
       Object.keys(filterTypes).length > 0 || Object.keys(sortType).length > 0
         ? this.renderList(this.state)
@@ -202,7 +199,7 @@ class ProductsListByCategory extends PureComponent {
         <Row>
           <Col className="sticky mr-md-1 p-0" md={3}>
             <CategoriesListBar />
-            <SideBar md={12} toggler="toggle">
+            <SideBar md={12} toggler="Filter & Sort">
               <Row className="m-0">
                 <Col sm={12}>
                   <SortProducts handleSort={this.onSubmitSort} />
