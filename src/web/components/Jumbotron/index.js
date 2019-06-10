@@ -13,6 +13,6 @@ export default () => (
         Sign in
       </Link>
     </p>
-    <Link to={ROUTES.LOGIN}>Create Account</Link>
+    <Link to={ROUTES.SIGN_UP}>Create Account</Link>
   </Jumbotron>
 );

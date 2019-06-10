@@ -5,14 +5,14 @@ import { Categories } from '../../containers';
 import { withAuthUser } from '../../session';
 const limitProducts = -5;
 
-const Home = ({ authUser, productsState }) => {
+const Home = ({ authUser = null, productsState }) => {
   return (
     <Container>
       <Slide
         categories={productsState.categories}
         products={productsState['Consumer-Electronics'].slice(limitProducts)}
       />
-      {authUser ? null : (
+      {!authUser && (
         <Row>
           <Col sm="12">
             <Jumbotron />
