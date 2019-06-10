@@ -1,10 +1,10 @@
-import React from 'react'
-import Logo from './Logo'
-import NavList from './NavList'
-import SearchBar from './SearchBar'
-import CountryBar from './CountryBar'
-import { Container, Row, Col, Navbar } from 'react-bootstrap'
-import RouteBar from './RouteBar'
+import React from 'react';
+import Logo from './Logo';
+import NavList from './NavList';
+import SearchBar from './SearchBar';
+import CountryBar from './CountryBar';
+import { Container, Row, Col, Navbar } from 'react-bootstrap';
+import RouteBar from './RouteBar';
 
 const Header = () => {
   return (
@@ -24,14 +24,14 @@ const Header = () => {
           <Col sm={12} className="text-left">
             <CountryBar />
           </Col>
-          <Col sm={12} className="text-left">
+          <Col sm={12} className="text-left route-tabs">
             <RouteBar />
           </Col>
         </Row>
       </Container>
     </header>
-  )
-}
+  );
+};
 
-export default Header
-export { Logo, NavList, SearchBar, CountryBar }
+export default Header;
+export { Logo, NavList, SearchBar, CountryBar };

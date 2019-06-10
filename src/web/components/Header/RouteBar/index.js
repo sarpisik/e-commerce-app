@@ -19,7 +19,7 @@ const LinkToCategories = () => (
 const returnBackSlashedRoute = route => '/' + route;
 
 const DynamicLink = ({ path, title, ...rest }) => (
-  <span className="route-tabs">
+  <span>
     <LinkToHome />
     <LinkToCategories />
     {path && (
