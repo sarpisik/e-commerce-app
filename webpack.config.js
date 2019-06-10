@@ -53,11 +53,11 @@ module.exports = (env, argv) => {
               : ['style-loader', 'css-loader']
         },
         {
-          test: /\.(eot|svg|ttf|woff|woff2)$/,
+          test: /\.(eot|ttf|woff|woff2)$/,
           use: [{ loader: 'file-loader', options: { outputPath: 'fonts/' } }]
         },
         {
-          test: /\.(png|svg|jpg|jpeg|gif)$/,
+          test: /\.(png|svg|jpg|jpeg|gif|svg)$/,
           use: [
             {
               loader: 'file-loader',
