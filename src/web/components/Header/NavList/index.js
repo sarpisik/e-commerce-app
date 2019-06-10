@@ -25,7 +25,12 @@ const NavList = ({ location, authUser }) => {
               <IconLink
                 name="My Cart"
                 icon="shopping-cart"
-                badge={authUser && authUser.cart && authUser.cart.length}
+                badge={
+                  authUser &&
+                  authUser.cart &&
+                  authUser.cart.length > 0 &&
+                  authUser.cart.length
+                }
               />
             </Nav.Link>
           </LinkContainer>
