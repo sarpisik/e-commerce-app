@@ -29,6 +29,7 @@ import { CategoryProductsList, UserProductsList } from './Products';
 import FormContainer, { CheckBox } from './FormContainer';
 import withScroll from './HOCs/withScroll';
 import ScrollToTop from './ScrollToTop';
+import Footer from './Footer';
 
 export {
   Header,
@@ -63,5 +64,6 @@ export {
   FormContainer,
   CheckBox,
   withScroll,
-  ScrollToTop
+  ScrollToTop,
+  Footer
 };

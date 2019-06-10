@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import * as ROUTES from './constants/routes';
 
 import { Home } from './containers';
-import { Header, PageLoader, Spinner } from './components';
+import { Header, PageLoader, Spinner, Footer } from './components';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -54,6 +54,7 @@ class App extends Component {
             <Route path={`${match.path}:pageId`} component={PageLoader} />
           </Switch>
         </Suspense>
+        <Footer />
       </>
     );
   }

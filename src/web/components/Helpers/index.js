@@ -15,6 +15,7 @@ import navigateCategoriesList, { setRoute } from './navigateCategoriesList';
 import firstLetterUppercase from './firstLetterUppercase';
 import getColorsPalette from './getColorsPalette';
 import searchTextInObject, { getCategories } from './searchProductByName';
+import getCurrentYear from './getCurrentYear';
 
 export {
   editImageSource,
@@ -37,5 +38,6 @@ export {
   firstLetterUppercase,
   getColorsPalette,
   searchTextInObject,
-  getCategories
+  getCategories,
+  getCurrentYear
 };
