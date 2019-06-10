@@ -1,10 +1,10 @@
 require('dotenv').config();
 const connectionString =
-  process.env['CUSTOMCONNSTR_mongoConnection'] ||
+  process.env['CUSTOMCONNSTR_MONGO_CONNECTION'] ||
   process.env.MONGODB_CREDENTIALS;
 
 const MongoClient = require('mongodb').MongoClient;
-const dbName = process.env.DB_NAME;
+const dbName = process.env['CUSTOMCONNSTR_DB_NAME'] || process.env.DB_NAME;
 const client = new MongoClient(connectionString, { useNewUrlParser: true });
 
 // CONNECT-DISCONNECT OPERATIONS
