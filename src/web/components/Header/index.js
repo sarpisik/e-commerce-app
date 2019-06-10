@@ -3,7 +3,7 @@ import Logo from './Logo';
 import NavList from './NavList';
 import SearchBar from './SearchBar';
 import CountryBar from './CountryBar';
-import { Container, Row, Col, Navbar } from 'react-bootstrap';
+import { Container, Row, Navbar } from 'react-bootstrap';
 import RouteBar from './RouteBar';
 
 const Header = () => {
@@ -22,9 +22,7 @@ const Header = () => {
         </Navbar>
         <Row noGutters className="bg-dark align-items-center">
           <CountryBar />
-          <Col sm={12} className="text-left route-tabs">
-            <RouteBar />
-          </Col>
+          <RouteBar />
         </Row>
       </Container>
     </header>

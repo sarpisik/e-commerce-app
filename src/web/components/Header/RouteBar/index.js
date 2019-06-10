@@ -6,6 +6,8 @@ import {
   createLocation,
   parseToValue
 } from '../../Helpers';
+
+import { Col } from 'react-bootstrap';
 import './index.css';
 
 const LinkToHome = () => <Link to={ROUTES.HOME}>/Home</Link>;
@@ -74,10 +76,10 @@ const DynamicLinks = ({ location }) => {
 
 const RouteBar = props => {
   return (
-    <>
+    <Col sm={12} className="text-left route-tabs">
       <span className="text-white">Your are here: </span>
       <DynamicLinks {...props} />
-    </>
+    </Col>
   );
 };
 
