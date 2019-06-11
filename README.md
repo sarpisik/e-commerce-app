@@ -1,4 +1,4 @@
-# MERN STACK E-COMMERCE DEMO APPLICATION
+# MERN STACK E-COMMERCE DEMO APPLICATION [![Build Status](https://travis-ci.org/sarpisik/e-commerce-app.svg?branch=master)](https://travis-ci.org/sarpisik/e-commerce-app)
 
 A Full Stack **MERN** (MongoDB-Express-React-Node JS) demo application hosted on Microsoft **Azure** Cloud Services.
 
