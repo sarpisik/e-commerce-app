@@ -8,8 +8,6 @@ A Full Stack **MERN** (MongoDB-Express-React-Node JS) demo application hosted on
 
 ## **Features**
 
----
-
 ### **Database**
 
 > It has 1000 dummy JSON objects as products on [MongoDB](https://www.mongodb.com/) and 200 on client.
@@ -40,8 +38,6 @@ A Full Stack **MERN** (MongoDB-Express-React-Node JS) demo application hosted on
 ---
 
 ## **Prerequisites**
-
----
 
 ### **Installing**
 
@@ -89,8 +85,6 @@ npm run build
 ---
 
 ## **App Structure**
-
----
 
 ### **BACKEND**
 
