@@ -30,6 +30,7 @@ A Full Stack MongoDB-Express-React-Node JS demo application hosted on Microsoft 
 
 ### **Webpack**
 
+> - Babel
 > - Minify
 > - Uglify
 > - Lazy Load
@@ -52,8 +53,8 @@ npm install
 
 > _Note: Before running the app, you will need to create a new .env file in the root of the app within below defined variables._
 
-- MONGODB_CREDENTIALS = _Your MongoDB account credentials_
-- DB_NAME = _Your database name_
+- MONGODB*CREDENTIALS = \_Your MongoDB account credentials*
+- DB*NAME = \_Your database name*
 
 * API_AUTH_USER_INFO = /api/auth/user/info
 * API_AUTH_USER_CART = /api/auth/user/cart

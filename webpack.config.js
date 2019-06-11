@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 // Workbox, info = https://webpack.js.org/guides/progressive-web-application
 const WorkboxPlugin = require('workbox-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
