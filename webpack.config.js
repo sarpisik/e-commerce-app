@@ -12,6 +12,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const CopyPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
@@ -97,11 +98,12 @@ module.exports = (env, argv) => {
         template: 'src/web/index.html'
       }),
       new WebpackPwaManifest({
-        name: 'Sarp IŞIK Portfolio',
-        short_name: 'Portfolio',
-        description: 'Junior Frontend Developer Portfolio',
-        background_color: '#ffffff'
+        name: 'Sarp IŞIK E-Commerce',
+        short_name: 'MERN',
+        description: 'MERN Stack E-Commerce Demo App',
+        background_color: '#000000'
       }),
+      new CopyPlugin([{ from: 'src/web/assets/favicon', to: 'favicon/' }]),
       new Dotenv()
     ]
   };
