@@ -1,6 +1,6 @@
 # MERN STACK E-COMMERCE DEMO APPLICATION
 
-A Full Stack MongoDB-Express-React-Node JS demo application hosted on Microsoft Azure Cloud Services.
+A Full Stack **MERN** (MongoDB-Express-React-Node JS) demo application hosted on Microsoft **Azure** Cloud Services.
 
 [Live Demo](https://sarpisik.azurewebsites.net)
 
