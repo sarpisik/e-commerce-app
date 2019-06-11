@@ -1,5 +1,7 @@
 # MERN STACK E-COMMERCE DEMO APPLICATION [![Build Status](https://travis-ci.org/sarpisik/e-commerce-app.svg?branch=master)](https://travis-ci.org/sarpisik/e-commerce-app)
 
+![alt text](https://www.sarpisik.com/images/4875d42e69528e9cbadc7ba64aefac5f.png 'App image')
+
 A Full Stack **MERN** (MongoDB-Express-React-Node JS) demo application hosted on Microsoft **Azure** Cloud Services.
 
 [Live Demo](https://sarpisik.azurewebsites.net)
@@ -91,7 +93,10 @@ npm run build
 Backend codes are located under the **src/backend** directory.
 
 - **api/** <br>
-  All API calls are navigated to relative files under the api/ folder.
+
+  All API calls are navigated to relative files under this directory. <br>
+  **open/**:Unauthorized APIs are located under this directory. <br>
+  **auth/**: Authorized APIs are located under this directory. They must have veridifed token ID before accessing this directory.
 
 - **db/** <br>
   Management of the communication in between MongoDB driver and Express JS.
