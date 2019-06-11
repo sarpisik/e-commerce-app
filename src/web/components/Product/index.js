@@ -4,7 +4,8 @@ import { Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import {
   updateImageSizesOfProducts,
   getWindowSize,
-  compareNumbers
+  compareNumbers,
+  firstLetterUppercase
 } from '../Helpers';
 import Spinner from '../Spinner';
 import Icon from '../Icon';
@@ -197,7 +198,17 @@ function setProductImage(src, index) {
 
 // Child Components
 function Title({ title }) {
-  return <ProductInfo className="m-0" description={title} />;
+  const capitalizedTitle = title
+    .split(' ')
+    .map(text => firstLetterUppercase(text))
+    .join(' ');
+  return (
+    <ProductInfo
+      capitalize="text-capitalize"
+      className="m-0"
+      description={capitalizedTitle}
+    />
+  );
 }
 function ReviewRatings({ average }) {
   return (
@@ -299,6 +310,7 @@ function AboutProduct({ about }) {
     <ProductInfo
       className="bg-white"
       label="Description"
+      lineBreak={<hr />}
       labelSizes={[12, 12]}
       description={about}
     />
