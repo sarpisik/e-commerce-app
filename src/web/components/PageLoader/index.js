@@ -2,6 +2,9 @@ import React, { lazy } from 'react';
 import * as ROUTES from '../../constants/routes';
 import { extractStringQuery } from '../Helpers';
 
+import { Container } from 'react-bootstrap';
+import './index.css';
+
 const Pages = {
   [ROUTES.CATEGORIES]: lazy(() =>
     import(/* webpackChunkName: "CategoriesPage" */ '../../pages/categories')
@@ -32,7 +35,11 @@ const Pages = {
 const PageLoader = props => {
   const Component = Pages[props.match.params.pageId];
   const searchQuery = extractStringQuery(props.location.search);
-  return <Component search={searchQuery} {...searchQuery} {...props} />;
+  return (
+    <Container className="page d-flex flex-column justify-content-center">
+      <Component search={searchQuery} {...searchQuery} {...props} />
+    </Container>
+  );
 };
 
 export default PageLoader;

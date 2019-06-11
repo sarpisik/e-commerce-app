@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import {
   Spinner,
   PageTitle,
@@ -77,18 +77,16 @@ class SearchPage extends PureComponent {
     return this.state.isLoading ? (
       <Spinner />
     ) : (
-      <Container>
-        <Row className="justify-content-center bg-light">
-          <PageTitle title="Search Result" />
-          <PageBody sm={12}>
-            {this.state.products.length > 0 ? (
-              <CategoryProductsList products={this.state.products} />
-            ) : (
-              <p>No items found.</p>
-            )}
-          </PageBody>
-        </Row>
-      </Container>
+      <Row className="justify-content-center bg-light">
+        <PageTitle title="Search Result" />
+        <PageBody sm={12}>
+          {this.state.products.length > 0 ? (
+            <CategoryProductsList products={this.state.products} />
+          ) : (
+            <p>No items found.</p>
+          )}
+        </PageBody>
+      </Row>
     );
   }
 }

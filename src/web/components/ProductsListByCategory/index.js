@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import SortProducts from '../SortProducts';
 import SideBar from '../SideBar';
 import FilterProducts from '../FilterProducts';
@@ -195,36 +195,31 @@ class ProductsListByCategory extends PureComponent {
         ? this.renderList(this.state)
         : this.props.getProductsByCategory(this.props.categoryName);
     return (
-      <Container>
-        <Row>
-          <Col className="sticky mr-md-1 p-0" md={3}>
-            <CategoriesListBar />
-            <SideBar md={12} toggler="Filter & Sort">
-              <Row className="m-0">
-                <Col sm={12}>
-                  <SortProducts handleSort={this.onSubmitSort} />
-                </Col>
-                <Col sm={12}>
-                  <FilterProducts
-                    handleFilter={this.onSubmitFilters}
-                    reviewCounts={this.reviewCounts}
-                    stockInProductsCount={this.stockInProducts}
-                    stockOutProductsCount={this.stockOutProducts}
-                    companies={this.companies}
-                    locationKey={this.props.location.key}
-                  />
-                </Col>
-              </Row>
-            </SideBar>
-          </Col>
-          <Col sm>
-            <CategoryProductsList
-              loading={this.props.loading}
-              products={list}
-            />
-          </Col>
-        </Row>
-      </Container>
+      <Row>
+        <Col className="sticky mr-md-1 p-0" md={3}>
+          <CategoriesListBar />
+          <SideBar md={12} toggler="Filter & Sort">
+            <Row className="m-0">
+              <Col sm={12}>
+                <SortProducts handleSort={this.onSubmitSort} />
+              </Col>
+              <Col sm={12}>
+                <FilterProducts
+                  handleFilter={this.onSubmitFilters}
+                  reviewCounts={this.reviewCounts}
+                  stockInProductsCount={this.stockInProducts}
+                  stockOutProductsCount={this.stockOutProducts}
+                  companies={this.companies}
+                  locationKey={this.props.location.key}
+                />
+              </Col>
+            </Row>
+          </SideBar>
+        </Col>
+        <Col sm>
+          <CategoryProductsList loading={this.props.loading} products={list} />
+        </Col>
+      </Row>
     );
   }
 }

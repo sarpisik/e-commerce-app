@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { Category } from '../../containers';
 import { Product, Spinner } from '../../components';
 import withProducts from '../../session/withProducts';
@@ -49,12 +49,12 @@ class ProductPage extends PureComponent {
     return this.state.isLoading ? (
       <Spinner />
     ) : (
-      <Container>
+      <>
         <Product product={product} {...this.props} />
         <Row className="bg-white">
           <Category categoryName={product.category} />
         </Row>
-      </Container>
+      </>
     );
   }
 }

@@ -1,18 +1,14 @@
-import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
-import { CategoriesList } from '../../containers'
-import { navigateCategoriesList } from '../../components/Helpers'
+import React from 'react';
+import { Row, Col } from 'react-bootstrap';
+import { CategoriesList } from '../../containers';
+import { navigateCategoriesList } from '../../components/Helpers';
 
-const CategoriesPage = () => {
-  return (
-    <Container>
-      <Row>
-        <Col>
-          <CategoriesList handleClick={navigateCategoriesList} />
-        </Col>
-      </Row>
-    </Container>
-  )
-}
+const CategoriesPage = () => (
+  <Row>
+    <Col>
+      <CategoriesList handleClick={navigateCategoriesList} />
+    </Col>
+  </Row>
+);
 
-export default CategoriesPage
+export default CategoriesPage;
