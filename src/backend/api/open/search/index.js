@@ -1,7 +1,7 @@
 const db = require('../../../db/mongo');
 const helpers = require('../../../utility/helpers');
 
-const { rejectHandler } = helpers;
+const { rejectHandler, filterText } = helpers;
 
 module.exports = function(request) {
   return new Promise((resolve, reject) => {
@@ -10,11 +10,12 @@ module.exports = function(request) {
       success: false,
       message: ''
     };
-    const searchExpression = new RegExp(search);
 
-    // If the fields are not empty, check db.
+    const searchExpression = new RegExp(filterText(search));
+
+    // If the fields are not empty and searchQuery is valid, check db.
     // Else, send error.
-    if (category && search) {
+    if (category && searchExpression) {
       db.ReadDB(
         category,
         {

@@ -7,7 +7,9 @@ import './index.css';
 import { CategoryProductsList } from '../../Products';
 import * as HISTORY from '../../../constants/history';
 import * as ROUTES from '../../../constants/routes';
-import { handleNavigation, searchTextInObject } from '../../Helpers';
+import { handleNavigation, Search } from '../../Helpers';
+
+const filterTextBy = /[A-Za-z]+/g;
 
 const INITIAL_STATE = {
   search: ''
@@ -23,16 +25,18 @@ const navigateSearchPage = search =>
   });
 
 const SearchBar = ({ onChange, onReset, search, productsState }) => {
+  // Search products in database
   const onSubmit = e => {
     e.preventDefault();
-    if (search) {
-      navigateSearchPage(search);
+    const filteredSearchText = Search.filterText(search);
+    if (filteredSearchText) {
+      navigateSearchPage(filteredSearchText);
       onReset();
     }
   };
 
-  const foundProducts =
-    search && searchTextInObject(search.toLowerCase(), productsState);
+  // Search products in Redux
+  const foundProducts = search && Search.getFoundItems(search, productsState);
   return (
     <Form onSubmit={onSubmit} onChange={onChange} className="flex-fill px-sm-3">
       <InputGroup className="search-container">
@@ -42,7 +46,7 @@ const SearchBar = ({ onChange, onReset, search, productsState }) => {
             <Icon icon="search" />
           </Button>
         </InputGroup.Append>
-        {foundProducts.length > 0 && (
+        {(foundProducts || []).length > 0 && (
           <div className="result bg-light">
             <CategoryProductsList products={foundProducts} />
             <a onClick={() => navigateSearchPage(search)}>

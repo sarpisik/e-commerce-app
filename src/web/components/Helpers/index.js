@@ -14,7 +14,7 @@ import { parseToKey, parseToValue } from './categoryNameParser';
 import navigateCategoriesList, { setRoute } from './navigateCategoriesList';
 import firstLetterUppercase from './firstLetterUppercase';
 import getColorsPalette from './getColorsPalette';
-import searchTextInObject, { getCategories } from './searchProductByName';
+import Search, { getCategories } from './searchProductByName';
 import getCurrentYear from './getCurrentYear';
 
 export {
@@ -37,7 +37,7 @@ export {
   setRoute,
   firstLetterUppercase,
   getColorsPalette,
-  searchTextInObject,
+  Search,
   getCategories,
   getCurrentYear
 };

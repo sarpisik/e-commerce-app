@@ -6,7 +6,7 @@ import {
   PageBody,
   CategoryProductsList
 } from '../../components';
-import { searchTextInObject, getCategories } from '../../components/Helpers';
+import { Search, getCategories } from '../../components/Helpers';
 import withProducts from '../../session/withProducts';
 
 const INITIAL_STATE = {
@@ -36,21 +36,28 @@ class SearchPage extends PureComponent {
   handleSearch = () => {
     this.repeat = 0;
     const search = Object.keys(this.props.search)[0];
-    const foundProductsOnLocal = searchTextInObject(
-      search.toLocaleLowerCase(),
-      this.props.productsState
-    );
-    this.saveFoundProducts(foundProductsOnLocal);
-    const categoryList = getCategories(this.props.productsState);
-    categoryList.forEach((category, index) => {
-      this.props.fetchProductByName(
-        {
-          category,
-          search
-        },
-        (...respond) => this.onSearchRespond(categoryList.length, ...respond)
+
+    // If search query exist, handle search.
+    // Else turn off loading.
+    if (search) {
+      const foundProductsOnLocal = Search.getFoundItems(
+        search.toLocaleLowerCase(),
+        this.props.productsState
       );
-    });
+      this.saveFoundProducts(foundProductsOnLocal);
+      const categoryList = getCategories(this.props.productsState);
+      categoryList.forEach((category, index) => {
+        this.props.fetchProductByName(
+          {
+            category,
+            search
+          },
+          (...respond) => this.onSearchRespond(categoryList.length, ...respond)
+        );
+      });
+    } else {
+      this.setState({ isLoading: false });
+    }
   };
 
   saveFoundProducts = foundProducts =>

@@ -1,7 +1,8 @@
 module.exports = {
   rejectHandler,
   userCredentialsToSend,
-  setArrayEvent
+  setArrayEvent,
+  filterText
 };
 
 function rejectHandler(respond, message) {
@@ -50,4 +51,9 @@ function setArrayEvent(action, array, product) {
           [array]: product
         }
       };
+}
+
+function filterText(text) {
+  const expression = /[A-Za-z]+/g;
+  return text.match(expression) && text.match(expression)[0];
 }
