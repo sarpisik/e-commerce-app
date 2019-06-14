@@ -9,8 +9,6 @@ import * as HISTORY from '../../../constants/history';
 import * as ROUTES from '../../../constants/routes';
 import { handleNavigation, Search } from '../../Helpers';
 
-const filterTextBy = /[A-Za-z]+/g;
-
 const INITIAL_STATE = {
   search: ''
 };
