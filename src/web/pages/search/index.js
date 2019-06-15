@@ -86,7 +86,7 @@ class SearchPage extends PureComponent {
     ) : (
       <Row className="justify-content-center bg-light">
         <PageTitle title="Search Result" />
-        <PageBody sm={12}>
+        <PageBody sm={9}>
           {this.state.products.length > 0 ? (
             <CategoryProductsList products={this.state.products} />
           ) : (
